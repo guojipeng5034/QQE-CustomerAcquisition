@@ -18,9 +18,9 @@ const { loginState } = storeToRefs(userStore);
 
 onShow(() => {
 	console.log('当前登录状态:', loginState.value);
-	uni.redirectTo({
-		url: '/pages/index/index'
-	});
+	// uni.redirectTo({
+	// 	url: '/pages/index/index'
+	// });
 	const handleRedirect = (state) => {
 		if (state === 'hasResult') {
 			uni.redirectTo({

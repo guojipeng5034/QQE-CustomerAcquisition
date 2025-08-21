@@ -20,6 +20,7 @@ export const useUserStore = defineStore('user', {
       this.loginState = 'pending';
       try {
         const code = await this.getLoginCode();
+		console.log(code)
         const res = await silentLogin(code);
         
         // **核心判断逻辑**

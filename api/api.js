@@ -8,40 +8,49 @@ import request from '@/utils/request.js';
  */
 export const silentLogin = (code) => {
 	// 这个请求会发送到您自己的业务后端，所以使用 'default' 配置
+	// 返回结果模型{"success":true,"openId":"oZHt5158xJ4TBy6W4SEZJgtlQ2_I","message":"登录成功","hasRecord":true,"userRecord":{"openid":"oZHt5158xJ4TBy6W4SEZJgtlQ2_I","phone":"17711111234","score":10,"remarks":""}}
 	return request({
-		url: '/auth/silent-login', // 假设您后端处理静默登录的接口是这个
+		url: '/api/login', // 假设您后端处理静默登录的接口是这个
 		method: 'POST',
 		data: {
-			code
+			'code':code
 		}
-	});
+	}, 'phoneService');
 };
 
 /**
  * @description: 调用后端接口获取真实手机号 (现在主要用于注册)
  * @param {string} code - 调用 uni.login() 获取的登录凭证
+ * @param {string} openId
  */
-export const getRealPhoneNumber = (code) => {
+export const getRealPhoneNumber = (code,openId) => {
+	// 返回结果模型{"success":true,"message":"电话更新成功","userRecord":{"openid":"oZHt5158xJ4TBy6W4SEZJgtlQ2_I","phone":"17711111234","score":0,"remarks":""}}
 	return request({
-		url: '/api/getPhoneNumber',
+		url: '/api/updatePhone',
 		method: 'POST',
 		data: {
-			code: code
+			'code': code,
+			'openid':openId
 		}
 	}, 'phoneService'); // <-- 关键：指定使用 phoneService 的配置
 };
 
 /**
  * @description: 提交答题结果接口
- * @param {Object} quizResult - 答题结果数据
+ * @param {string} openId
+ * @param {int} score
  */
-export const submitQuizResult = (quizResult) => {
+export const submitQuizResult = (openId,score) => {
 	// 这里没有指定配置，默认使用 'default'
+	// 返回结果模型{"success":true,"message":"分数更新成功","userRecord":{"openid":"oZHt5158xJ4TBy6W4SEZJgtlQ2_I","phone":"17711111234","score":10,"remarks":""}}
 	return request({
-		url: '/quiz/submit',
+		url: '/api/updateScore',
 		method: 'POST',
-		data: quizResult
-	});
+		data: {
+			'openid':openId,
+			'score':score
+		}
+	}, 'phoneService');
 };
 
 /**
