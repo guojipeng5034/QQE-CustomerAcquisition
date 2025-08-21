@@ -1,14 +1,21 @@
 <script>
+	import { useUserStore } from '@/stores/user';
+
 	export default {
 		onLaunch: function() {
-			console.warn('当前组件仅支持 uni_modules 目录结构 ，请升级 HBuilderX 到 3.1.0 版本以上！')
-			console.log('App Launch')
+			console.log('App Launch');
+			
+			// #ifdef MP-WEIXIN
+			const userStore = useUserStore();
+			// 触发静默登录
+			userStore.handleSilentLogin();
+			// #endif
 		},
 		onShow: function() {
-			console.log('App Show')
+			console.log('App Show');
 		},
 		onHide: function() {
-			console.log('App Hide')
+			console.log('App Hide');
 		}
 	}
 </script>

@@ -42,7 +42,6 @@ const userStore = useUserStore();
 const phone = ref('');
 const code = ref('');
 
-// --- 验证码倒计时逻辑 ---
 const countdown = ref(0);
 const timer = ref(null);
 
@@ -63,11 +62,7 @@ const startCountdown = () => {
 	}, 1000);
 };
 
-/**
- * @description: 发送验证码
- */
 const sendCode = () => {
-	// 1. 简单的手机号格式校验
 	const phoneRegex = /^1[3-9]\d{9}$/;
 	if (!phoneRegex.test(phone.value)) {
 		uni.showToast({
@@ -77,20 +72,15 @@ const sendCode = () => {
 		return;
 	}
 	
-	// 2. 在这里调用发送验证码的真实API
 	console.log('向手机号', phone.value, '发送验证码');
 	uni.showToast({
 		title: '验证码已发送',
 		icon: 'none'
 	});
 
-	// 3. 开始倒计时
 	startCountdown();
 };
 
-/**
- * @description: 登录
- */
 const login = async () => {
 	if (!phone.value || !code.value) {
 		uni.showToast({ title: '请输入手机号和验证码', icon: 'none' });
@@ -98,14 +88,11 @@ const login = async () => {
 	}
 	
 	try {
-		// 调用 store action 发起登录请求
 		await userStore.handleSmsLogin(phone.value, code.value);
-		// 登录成功，跳转到答题页
 		uni.redirectTo({
 			url: '/pages/quiz/index'
 		});
 	} catch (error) {
-		// 登录失败，在 userStore 的 action 中已有统一的 toast 提示
 		console.error('H5登录失败:', error);
 	}
 };
@@ -120,7 +107,6 @@ const login = async () => {
 	background-color: #f8f8f8;
 	height: 100vh;
 }
-
 .login-wrapper {
 	width: 90vw;
 	max-width: 400px;
@@ -128,32 +114,27 @@ const login = async () => {
 	flex-direction: column;
 	align-items: center;
 }
-
 .logo {
 	width: 60px;
 	height: 60px;
 	margin-bottom: 20px;
 }
-
 .title {
 	font-size: 24px;
 	font-weight: bold;
 	margin-bottom: 10px;
 }
-
 .subtitle {
 	font-size: 14px;
 	color: #999;
 	margin-bottom: 40px;
 }
-
 .input-group {
 	width: 100%;
 	margin-bottom: 20px;
 	background-color: #fff;
 	border-radius: 8px;
 	box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-	/* uni-easyinput 默认样式调整 */
 	--easyinput-input-height: 50px;
 	--easyinput-font-size: 16px;
 }
@@ -164,7 +145,6 @@ const login = async () => {
 .code-group .uni-easyinput {
 	flex: 1;
 }
-
 .button {
 	display: flex;
 	align-items: center;
@@ -173,7 +153,6 @@ const login = async () => {
 	font-size: 16px;
 	height: 50px;
 }
-
 .code-button {
 	background-color: transparent;
 	color: #007aff;
@@ -181,7 +160,7 @@ const login = async () => {
 	padding: 0 15px;
 	margin-left: 10px;
 	border: none;
-	white-space: nowrap; /* 防止文字换行 */
+	white-space: nowrap;
 }
 .code-button::after {
 	border: none;
@@ -190,7 +169,6 @@ const login = async () => {
 	color: #999;
 	background-color: transparent;
 }
-
 .login-button {
 	width: 100%;
 	margin-top: 20px;

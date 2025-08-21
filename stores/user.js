@@ -1,58 +1,127 @@
-// stores/user.js (改造后)
+// stores/user.js
 
 import { defineStore } from 'pinia';
-import { loginWithWeixin, loginWithSmsCode } from '@/api/api.js';
+import { getRealPhoneNumber, loginWithSmsCode, silentLogin } from '@/api/api.js';
+import { useQuizStore } from './quiz'; // 引入 quiz store
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    isLoggedIn: !!uni.getStorageSync('token'), // 根据本地是否有token来判断初始登录状态
+    // 'pending': 待定, 'loggedIn': 已登录(未答题), 'guest': 访客(新用户), 'hasResult': 已有结果
+    loginState: 'pending',
     userInfo: uni.getStorageSync('userInfo') || null,
     token: uni.getStorageSync('token') || '',
+    openid: uni.getStorageSync('openid') || '',
   }),
+  getters: {
+    isLoggedIn: (state) => state.loginState === 'loggedIn' || state.loginState === 'hasResult',
+  },
   actions: {
-    // 处理微信登录的 Action
-    async handleWxLogin(code, encryptedData, iv) {
+    async handleSilentLogin() {
+      this.loginState = 'pending';
       try {
-        const res = await loginWithWeixin(code, encryptedData, iv);
-        // 假设后端成功后返回 { code: 200, data: { userInfo: {...}, token: '...' } }
-        this.setLoginInfo(res.data);
-        return Promise.resolve(res.data);
+        const code = await this.getLoginCode();
+        const res = await silentLogin(code);
+        
+        // **核心判断逻辑**
+        if (res.data && res.data.userInfo) {
+          // 用户存在，继续判断是否已答题
+          // 假设：已答题的用户信息中包含 score 字段且不为null
+          if (res.data.userInfo.score !== null && res.data.userInfo.score !== undefined) {
+            // 已有答题结果
+            this.setLoginInfo(res.data);
+            
+            // 将用户的分数和答案同步到 quizStore，以便结果页显示
+            const quizStore = useQuizStore();
+            quizStore.syncResult(res.data.userInfo.score, res.data.userInfo.answers);
+
+            this.loginState = 'hasResult';
+
+          } else {
+            // 老用户，但未答题
+            this.setLoginInfo(res.data);
+            this.loginState = 'loggedIn';
+          }
+        } else {
+          // 新用户
+          this.openid = res.data.openid;
+          this.token = res.data.token;
+          uni.setStorageSync('openid', res.data.openid);
+          uni.setStorageSync('token', res.data.token);
+          this.loginState = 'guest';
+        }
+        return Promise.resolve(this.loginState);
       } catch (error) {
-        console.error("微信登录失败", error);
+        this.loginState = 'guest';
+        console.error("静默登录失败", error);
+        return Promise.reject(error);
+      }
+    },
+
+    // ... handleWxLogin 和其他方法保持不变 ...
+    async handleWxLogin(e) {
+      try {
+        const code = await this.getLoginCode();
+        const res = await getRealPhoneNumber(e.target.code);
+        const phoneNumber = res.phoneNumber;
+        const registeredUserInfo = { phone: phoneNumber, id: this.openid, name: '微信用户' };
+        
+        this.setLoginInfo({
+            userInfo: registeredUserInfo,
+            token: this.token
+        });
+        
+        this.loginState = 'loggedIn';
+        
+        uni.showToast({
+          title: '授权成功！',
+          icon: 'success'
+        });
+
+        return Promise.resolve();
+      } catch (error) {
+        console.error("手机号授权/注册流程失败", error);
         return Promise.reject(error);
       }
     },
     
-    // 处理H5登录的 Action
+    getLoginCode() {
+        return new Promise((resolve, reject) => {
+            uni.login({
+                provider: 'weixin',
+                success: res => res.code ? resolve(res.code) : reject(new Error('获取code失败')),
+                fail: err => reject(err)
+            });
+        });
+    },
+
+    setLoginInfo(data) {
+      this.userInfo = data.userInfo;
+      this.token = data.token;
+      this.openid = data.openid || this.openid;
+
+      uni.setStorageSync('userInfo', data.userInfo);
+      uni.setStorageSync('token', data.token);
+      if(this.openid) uni.setStorageSync('openid', this.openid);
+    },
+
     async handleSmsLogin(phone, code) {
         try {
             const res = await loginWithSmsCode(phone, code);
             this.setLoginInfo(res.data);
+            this.loginState = 'loggedIn';
             return Promise.resolve(res.data);
         } catch (error) {
+            this.loginState = 'guest';
             console.error("H5登录失败", error);
             return Promise.reject(error);
         }
     },
-
-    // 统一设置登录信息并持久化存储
-    setLoginInfo(data) {
-      this.isLoggedIn = true;
-      this.userInfo = data.userInfo;
-      this.token = data.token;
-
-      uni.setStorageSync('userInfo', data.userInfo);
-      uni.setStorageSync('token', data.token);
-    },
-
-    // 退出登录
     logout() {
-      this.isLoggedIn = false;
+      this.loginState = 'guest';
       this.userInfo = null;
       this.token = '';
-
-      uni.removeStorageSync('userInfo');
-      uni.removeStorageSync('token');
+      this.openid = '';
+      uni.clearStorageSync();
     },
   },
 });

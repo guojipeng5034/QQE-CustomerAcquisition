@@ -1,40 +1,114 @@
 <template>
 	<view class="result-container">
-		<view class="result-text">您答对了 {{ quizStore.score }} 道题！</view>
-		<button class="button" @click="quizStore.startReview">回顾</button>
-		<button class="button" @click="restart">重新答题</button>
+		<view class="score-card">
+			<view class="score-title">答题完成！</view>
+			<view class="score-text">
+				<text class="score">{{ quizStore.score }}</text>
+				<text v-if="quizStore.questions.length > 0" class="total"> / {{ quizStore.questions.length }}</text>
+			</view>
+			<view class="score-feedback">{{ feedbackMessage }}</view>
+		</view>
+
+		<view class="action-buttons">
+			<button 
+				v-if="canReview"
+				class="button review-button" 
+				@click="quizStore.startReview"
+			>
+				回顾答案
+			</button>
+		</view>
 	</view>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
 import { useQuizStore } from '@/stores/quiz';
-import { mapStores } from 'pinia';
+import { useUserStore } from '@/stores/user'; // 引入 userStore
+import { onLoad } from '@dcloudio/uni-app';
 
-export default {
-  computed: {
-    ...mapStores(useQuizStore)
-  },
-  methods: {
-    restart() {
-      uni.redirectTo({
-        url: '/pages/quiz/index'
-      });
-    }
-  }
-};
+const quizStore = useQuizStore();
+const userStore = useUserStore();
+
+// 计算是否可以回顾
+const canReview = computed(() => {
+	// 确保 quizStore 中有题目数据，并且有答案记录
+	return quizStore.questions.length > 0 && quizStore.selectedAnswers && quizStore.selectedAnswers.length > 0;
+});
+
+const feedbackMessage = computed(() => {
+	// 如果是直接跳转过来的，questions可能为空，需要安全处理
+	const total = quizStore.questions.length || 10; // 假设总题数为10
+	if(total === 0) return "欢迎回来！";
+
+	const rate = quizStore.score / total;
+	if (rate === 1) return "太棒了，全部正确！";
+	if (rate >= 0.8) return "非常不错，继续努力！";
+	if (rate >= 0.6) return "成绩合格，再接再厉！";
+	return "还有提升空间哦，加油！";
+});
+
+// 当页面加载时，特别是从静默登录直接跳转过来时，
+// 如果 quizStore 中还没有题目数据，需要加载一下
+onLoad(() => {
+	if (quizStore.questions.length === 0) {
+		quizStore.fetchQuestions();
+	}
+});
 </script>
 
 <style>
 .result-container {
-  padding: 20px;
-  text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100vh;
+	background-color: #f4f4f4;
+	padding: 20px;
 }
-
-.result-text {
-  font-size: 20px;
-  margin-bottom: 20px;
+.score-card {
+	background-color: #fff;
+	border-radius: 12px;
+	padding: 30px;
+	text-align: center;
+	width: 100%;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.score-title {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+.score-text {
+	margin-bottom: 20px;
+}
+.score {
+	font-size: 48px;
+	color: #007aff;
+	font-weight: bold;
+}
+.total {
+	font-size: 24px;
+	color: #888;
+}
+.score-feedback {
+	font-size: 16px;
+	color: #666;
+}
+.action-buttons {
+	display: flex;
+	justify-content: center; /* 居中 */
+	width: 100%;
+	margin-top: 40px;
 }
 .button {
-  margin-top: 10px;
+	width: 80%; /* 按钮宽度 */
+	max-width: 300px;
+	border-radius: 20px;
+}
+.review-button {
+	background-color: #007aff;
+	color: #fff;
 }
 </style>
