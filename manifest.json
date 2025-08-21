@@ -1,60 +1,72 @@
 {
-    "name" : "QQE-CustomerAcquisition",
-    "appid" : "",
-    "description" : "",
-    "versionName" : "1.0.0",
-    "versionCode" : "100",
-    "transformPx" : false,
-    "app-plus" : {
-        /* 5+App特有相关 */
-        "usingComponents" : true,
-        "nvueCompiler" : "uni-app",
-        "nvueStyleCompiler" : "uni-app",
-        "splashscreen" : {
-            "alwaysShowBeforeRender" : true,
-            "waiting" : true,
-            "autoclose" : true,
-            "delay" : 0
-        },
-        "modules" : {},
-        /* 模块配置 */
-        "distribute" : {
-            /* 应用发布信息 */
-            "android" : {
-                /* android打包配置 */
-                "permissions" : [
-                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-                    "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-                    "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
-            },
-            "ios" : {},
-            /* ios打包配置 */
-            "sdkConfigs" : {}
-        }
-    },
-    /* SDK配置 */
-    "quickapp" : {},
-    /* 快应用特有相关 */
-    "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "",
-        "setting" : {
-            "urlCheck" : false
-        },
-        "usingComponents" : true
-    },
-    "vueVersion" : "3"
+	"name": "QQE-CustomerAcquisition",
+	"appid": "",
+	"description": "",
+	"versionName": "1.0.0",
+	"versionCode": "100",
+	"transformPx": false,
+	"app-plus": {
+		/* 5+App特有相关 */
+		"usingComponents": true,
+		"nvueCompiler": "uni-app",
+		"nvueStyleCompiler": "uni-app",
+		"splashscreen": {
+			"alwaysShowBeforeRender": true,
+			"waiting": true,
+			"autoclose": true,
+			"delay": 0
+		},
+		"modules": {},
+		/* 模块配置 */
+		"distribute": {
+			/* 应用发布信息 */
+			"android": {
+				/* android打包配置 */
+				"permissions": [
+					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
+					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+					"<uses-feature android:name=\"android.hardware.camera\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
+				]
+			},
+			"ios": {},
+			/* ios打包配置 */
+			"sdkConfigs": {}
+		}
+	},
+	/* SDK配置 */
+	"quickapp": {},
+	/* 快应用特有相关 */
+	"mp-weixin": {
+		"appid": "wxc23126f541312312", // 【必填】在这里填入您自己的微信小程序 AppID
+		"setting": {
+			"urlCheck": false, // 【建议】开发时建议关闭，这样 H5 的链接在小程序中可以正常打开
+			"es6": true, // 【建议】启用 ES6 转 ES5
+			"minified": true, // 【建议】上传代码时自动压缩
+			"postcss": true // 【建议】自动处理 CSS 样式
+		},
+		"usingComponents": true,
+		"permission": {
+			// 如果您需要用到用户位置信息，需要在这里声明
+			// "scope.userLocation": {
+			//     "desc": "您的位置信息将用于小程序位置接口的效果展示" 
+			// }
+		},
+		"requiredPrivateInfos": [
+			// 如果您需要获取用户手机号，必须声明
+			"getPhoneNumber"
+		]
+	},
+	"vueVersion": "3"
 }

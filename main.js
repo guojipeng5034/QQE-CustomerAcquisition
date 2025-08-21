@@ -2,7 +2,6 @@
 // #ifndef VUE3
 import Vue from 'vue'
 import App from './App'
-import { createPinia } from 'pinia' // 引入 pinia
 Vue.config.productionTip = false
 
 App.mpType = 'app'
@@ -15,10 +14,11 @@ app.$mount()
 
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
+import { createPinia } from 'pinia' // 引入 pinia
 import App from './App.vue'
 export function createApp() {
   const app = createSSRApp(App)
-  app.use(createPinia()) // 使用 pinia
+  
   return {
     app
   }
