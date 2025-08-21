@@ -1,29 +1,56 @@
 <template>
 	<view class="container">
-		
-		<view class="intro">本项目已包含uni ui组件，无需import和注册，可直接使用。在代码区键入字母u，即可通过代码助手列出所有可用组件。光标置于组件名称处按F1，即可查看组件文档。</view>
-		<text class="intro">详见：</text>
-		<uni-link :href="href" :text="href"></uni-link>
+		<button class="button" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">微信手机号一键登录</button>
+		<view class="intro" v-if="!isWeixin">正在跳转到H5登录...</view>
 	</view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				href: 'https://uniapp.dcloud.io/component/README?id=uniui'
-			}
-		},
-		methods: {
+import { useUserStore } from '@/stores/user';
 
-		}
-	}
+export default {
+  data() {
+    return {
+      isWeixin: false
+    };
+  },
+  onLoad() {
+    // #ifdef H5
+    uni.redirectTo({
+      url: '/pages/login/index'
+    });
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    this.isWeixin = true;
+    // #endif
+  },
+  methods: {
+    getPhoneNumber(e) {
+      const userStore = useUserStore();
+      if (e.detail.errMsg === 'getPhoneNumber:ok') {
+        // 在这里，您应该将加密的数据发送到后端解密，然后进行登录
+        console.log('用户授权手机号', e.detail);
+        userStore.login({ phone: '微信用户' }); // 模拟登录
+        uni.redirectTo({
+          url: '/pages/quiz/index'
+        });
+      } else {
+        // 用户拒绝授权
+        console.log('用户拒绝授权');
+      }
+    }
+  }
+}
 </script>
 
 <style>
-	.container {
-		padding: 20px;
-		font-size: 14px;
-		line-height: 24px;
-	}
+.container {
+  padding: 20px;
+  font-size: 14px;
+  line-height: 24px;
+}
+.button {
+  margin-top: 50px;
+}
 </style>
