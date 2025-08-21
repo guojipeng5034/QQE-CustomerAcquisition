@@ -29,7 +29,7 @@ export const getRealPhoneNumber = (code,openId) => {
 		url: '/api/updatePhone',
 		method: 'POST',
 		data: {
-			'code': code,
+			'phone': code,
 			'openid':openId
 		}
 	}, 'phoneService'); // <-- 关键：指定使用 phoneService 的配置

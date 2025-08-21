@@ -1,7 +1,7 @@
 <template>
 	<view class="result-container">
 		<view class="score-card">
-			<view class="score-title">答题完成！</view>
+			<view class="score-title">您的答题结果</view>
 			<view class="score-text">
 				<text class="score">{{ quizStore.score }}</text>
 				<text v-if="quizStore.questions.length > 0" class="total"> / {{ quizStore.questions.length }}</text>
@@ -24,7 +24,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useQuizStore } from '@/stores/quiz';
-import { useUserStore } from '@/stores/user'; // 引入 userStore
+import { useUserStore } from '@/stores/user';
 import { onLoad } from '@dcloudio/uni-app';
 
 const quizStore = useQuizStore();
@@ -32,14 +32,14 @@ const userStore = useUserStore();
 
 // 计算是否可以回顾
 const canReview = computed(() => {
-	// 确保 quizStore 中有题目数据，并且有答案记录
-	return quizStore.questions.length > 0 && quizStore.selectedAnswers && quizStore.selectedAnswers.length > 0;
+	// 确保 quizStore 中有题目数据，并且 selectedAnswers 是一个有内容的数组
+	return quizStore.questions.length > 0 && Array.isArray(quizStore.selectedAnswers) && quizStore.selectedAnswers.length > 0;
 });
 
 const feedbackMessage = computed(() => {
 	// 如果是直接跳转过来的，questions可能为空，需要安全处理
-	const total = quizStore.questions.length || 10; // 假设总题数为10
-	if(total === 0) return "欢迎回来！";
+	const total = quizStore.questions.length || 10;
+	if(total === 0 && !quizStore.hasSyncedResult) return "正在计算...";
 
 	const rate = quizStore.score / total;
 	if (rate === 1) return "太棒了，全部正确！";
@@ -48,11 +48,14 @@ const feedbackMessage = computed(() => {
 	return "还有提升空间哦，加油！";
 });
 
-// 当页面加载时，特别是从静默登录直接跳转过来时，
-// 如果 quizStore 中还没有题目数据，需要加载一下
 onLoad(() => {
+    // [核心修正]
+    // 无论是刚答完题过来，还是静默登录直接跳转过来，
+    // 我们都需要题目数据来支撑“回顾”功能和计算总分。
+    // 但只有在静默登录跳转过来时才需要手动加载。
+    // loadQuestionsForReview 方法能安全地加载题目而不重置分数。
 	if (quizStore.questions.length === 0) {
-		quizStore.fetchQuestions();
+		quizStore.loadQuestionsForReview();
 	}
 });
 </script>
@@ -98,12 +101,12 @@ onLoad(() => {
 }
 .action-buttons {
 	display: flex;
-	justify-content: center; /* 居中 */
+	justify-content: center;
 	width: 100%;
 	margin-top: 40px;
 }
 .button {
-	width: 80%; /* 按钮宽度 */
+	width: 80%;
 	max-width: 300px;
 	border-radius: 20px;
 }

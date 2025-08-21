@@ -18,14 +18,21 @@ import { onLoad } from '@dcloudio/uni-app';
 const userStore = useUserStore();
 
 const getPhoneNumber = async (e) => {
+	// 1. 检查用户是否拒绝
 	if (e.detail.errMsg !== 'getPhoneNumber:ok') {
 		uni.showToast({ title: '您已取消授权', icon: 'none' });
 		return;
 	}
+	// 2. 检查 code 是否获取成功
+	if (!e.detail.code) {
+		uni.showToast({ title: '获取授权码失败', icon: 'none' });
+		return;
+	}
 	
-	// 现在 handleWxLogin 不需要 code，因为它会自己获取
 	try {
-		await userStore.handleWxLogin(e);
+		// 3. 调用新的 handleRegister action，并传入从按钮事件中获取的 code
+		await userStore.handleRegister(e.detail.code);
+		
 		// 注册成功后，store 的状态会变为 loggedIn，可以跳转了
 		uni.redirectTo({
 			url: '/pages/quiz/index'

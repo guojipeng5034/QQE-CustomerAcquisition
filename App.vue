@@ -2,13 +2,17 @@
 	import { useUserStore } from '@/stores/user';
 
 	export default {
+		// [新增] 定义全局数据
+		globalData: {
+			loginPromise: null
+		},
 		onLaunch: function() {
 			console.log('App Launch');
 			
 			// #ifdef MP-WEIXIN
 			const userStore = useUserStore();
-			// 触发静默登录
-			userStore.handleSilentLogin();
+			// [核心修改] 将静默登录的 Promise 存入 globalData
+			this.globalData.loginPromise = userStore.handleSilentLogin();
 			// #endif
 		},
 		onShow: function() {

@@ -50,6 +50,7 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         "appid" : "wxad0e8809c968b130", // 【必填】在这里填入您自己的微信小程序 AppID
+		"lazyCodeLoading": "requiredComponents",
         "setting" : {
             "urlCheck" : false, // 【建议】开发时建议关闭，这样 H5 的链接在小程序中可以正常打开
             "es6" : true, // 【建议】启用 ES6 转 ES5
