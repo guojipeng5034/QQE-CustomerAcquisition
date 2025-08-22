@@ -1,123 +1,269 @@
 <template>
 	<view class="result-container">
 		<view class="top-back">
-			
+			<image src="https://static.campustop.net/global/wechat/20250822-103614.jpg" class="top-back-img"
+				mode="widthFix" />
+			<view class="title-text">块酷英语</view>
+			<view class="title-phone">{{formatPhone(userStore.userInfo?.phone)}}</view>
+			<view class="title-two">
+				<view class="title-inde">测试报告</view>
+				<view class="title-inde-chr">TEST REPORT</view>
+			</view>
+			<view class="title-bottom"></view>
 		</view>
 		<view class="score-card">
-			<view class="score-title">您的答题结果</view>
-			<view class="score-text">
-				<text class="score">{{ quizStore.score }}</text>
-				<text v-if="quizStore.questions.length > 0" class="total"> / {{ quizStore.questions.length }}</text>
+			<view class="score-title">
 			</view>
-			<view class="score-feedback">{{ feedbackMessage }}</view>
+			<view class="score-text">
+				<view class="content">
+					<GaugeChart :value="quizStore.score" :max-value="12" />
+				</view>
+
+				<view v-if="resultDetails">
+					<view class="fun-mig">
+						<view class="fun-text">迁徙力等级</view>
+						<view class="fun-sub-text">{{ resultDetails.title }}</view>
+					</view>
+					<view class="fun-mig">
+						<view class="fun-text">评语</view>
+						<view class="fun-sub-text">{{ resultDetails.description }}</view>
+					</view>
+				</view>
+				
+			</view>
 		</view>
 
 		<view class="action-buttons">
-			<button 
-				v-if="canReview"
-				class="button review-button" 
-				@click="quizStore.startReview"
-			>
-				回顾答案
+			<button v-if="canReview" class="button review-button" @click="quizStore.startReview">
+				答题记录
 			</button>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useQuizStore } from '@/stores/quiz';
-import { useUserStore } from '@/stores/user';
-import { onLoad } from '@dcloudio/uni-app';
+	import {
+		computed,
+		ref,
+		onMounted
+	} from 'vue';
+	import {
+		useQuizStore
+	} from '@/stores/quiz';
+	import {
+		useUserStore
+	} from '@/stores/user';
+	import {
+		onLoad
+	} from '@dcloudio/uni-app';
+	// *** 1. 引入您的评级数据 ***
+	// 请确保这个文件路径是正确的
+	import { evaluationLevels } from '@/data/questions.js';
+	import GaugeChart from '@/components/GaugeChart/GaugeChart.vue';
 
-const quizStore = useQuizStore();
-const userStore = useUserStore();
+	const quizStore = useQuizStore();
+	const userStore = useUserStore();
 
-// 计算是否可以回顾
-const canReview = computed(() => {
-	// 确保 quizStore 中有题目数据，并且 selectedAnswers 是一个有内容的数组
-	return quizStore.questions.length > 0 && Array.isArray(quizStore.selectedAnswers) && quizStore.selectedAnswers.length > 0;
-});
+	const canReview = computed(() => {
+		return quizStore.questions.length > 0 && Array.isArray(quizStore.selectedAnswers) && quizStore
+			.selectedAnswers.length > 0;
+	});
+	
+	// *** 2. 删除旧的 feedbackMessage，创建新的 resultDetails ***
+	const resultDetails = computed(() => {
+		// 处理正在加载或数据未同步的情况
+		if (!quizStore.hasSyncedResult && quizStore.score === 0) {
+			return {
+				title: "正在计算...",
+				description: "请稍候，我们正在为您生成评估结果。",
+			};
+		}
+		
+		const score = quizStore.score;
+		
+		// 根据分数查找对应的级别对象
+		const foundLevel = evaluationLevels.find(level =>
+			score >= level.min_score && score <= level.max_score
+		);
+		
+		// 如果找到了，就返回该对象；如果没找到，返回一个默认的未定义对象
+		return foundLevel || {
+			title: "结果异常",
+			description: "无法匹配到对应的分数等级，请检查数据。",
+		};
+	});
 
-const feedbackMessage = computed(() => {
-	// 如果是直接跳转过来的，questions可能为空，需要安全处理
-	const total = quizStore.questions.length || 10;
-	if(total === 0 && !quizStore.hasSyncedResult) return "正在计算...";
 
-	const rate = quizStore.score / total;
-	if (rate === 1) return "太棒了，全部正确！";
-	if (rate >= 0.8) return "非常不错，继续努力！";
-	if (rate >= 0.6) return "成绩合格，再接再厉！";
-	return "还有提升空间哦，加油！";
-});
+	const formatPhone = (phone) => {
+		if (phone && typeof phone === 'string' && phone.length === 11) {
+			return phone.slice(0, 3) + '****' + phone.slice(7);
+		}
+		return phone;
+	};
 
-onLoad(() => {
-    // [核心修正]
-    // 无论是刚答完题过来，还是静默登录直接跳转过来，
-    // 我们都需要题目数据来支撑“回顾”功能和计算总分。
-    // 但只有在静默登录跳转过来时才需要手动加载。
-    // loadQuestionsForReview 方法能安全地加载题目而不重置分数。
-	if (quizStore.questions.length === 0) {
-		quizStore.loadQuestionsForReview();
-	}
-});
+	onLoad(() => {
+		
+		// 如果页面被直接打开，questions为空，则加载题目数据用于回顾
+		if (quizStore.questions.length === 0) {
+			quizStore.loadQuestionsForReview();
+		}
+	});
 </script>
 
 <style>
-.result-container {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
-	background-color: #f4f4f4;
-	padding: 20px;
-}
-.top-back{
-	
-}
-.score-card {
-	background-color: #fff;
-	border-radius: 12px;
-	padding: 30px;
-	text-align: center;
-	width: 100%;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-.score-title {
-	font-size: 24px;
-	font-weight: bold;
-	margin-bottom: 20px;
-}
-.score-text {
-	margin-bottom: 20px;
-}
-.score {
-	font-size: 48px;
-	color: #007aff;
-	font-weight: bold;
-}
-.total {
-	font-size: 24px;
-	color: #888;
-}
-.score-feedback {
-	font-size: 16px;
-	color: #666;
-}
-.action-buttons {
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	margin-top: 40px;
-}
-.button {
-	width: 80%;
-	max-width: 300px;
-	border-radius: 20px;
-}
-.review-button {
-	background-color: #007aff;
-	color: #fff;
-}
+	/* 样式部分保持不变 */
+	.result-container {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+		background-color: #FFFFFF;
+		position: relative;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 0rpx;
+	}
+
+	.title-text {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #FFFFFF;
+		font-weight: bold;
+		font-size: 34rpx;
+		position: absolute;
+		top: 130rpx;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		letter-spacing: 2rpx;
+	}
+
+	.title-phone {
+		color: #FFFFFF;
+		position: absolute;
+		top: 130rpx;
+		left: 50rpx;
+	}
+
+	.top-back {
+		width: 100%;
+		position: relative;
+		padding: 0;
+		margin: 0;
+		border: 0;
+	}
+
+	.top-back-img {
+		width: 100%;
+		display: block;
+	}
+
+	.title-two {
+		display: flex;
+		flex-direction: column;
+		position: absolute;
+		top: 240rpx;
+		left: 50rpx;
+	}
+
+	.title-inde {
+		font-weight: 500;
+		font-size: 52rpx;
+		color: #FFFFFF;
+		line-height: 80rpx;
+		text-align: left;
+		font-style: normal;
+		letter-spacing: 4rpx;
+	}
+
+	.title-inde-chr {
+		margin-top: 16rpx;
+		font-weight: 500;
+		font-size: 34rpx;
+		color: rgba(255, 255, 255, 0.6);
+		/* 设置白色文字的透明度为 60% */
+		line-height: 40rpx;
+		letter-spacing: 1rpx;
+		text-align: left;
+		font-style: normal;
+	}
+
+	.title-bottom {
+		background: #FFFFFF;
+		border-radius: 52rpx 52rpx 0 0;
+		width: 100%;
+		height: 60rpx;
+		position: absolute;
+		bottom: 0;
+		padding: 0;
+		margin: 0 0 -1px 0;
+	}
+
+	.score-card {
+		background: #FFFFFF;
+		background-color: #fff;
+		text-align: center;
+		width: 100%;
+		border: 0;
+		padding: 0;
+		margin: 0;
+	}
+
+	.score-title {
+		margin-bottom: 1px;
+	}
+
+	.action-buttons {
+		position: fixed;
+		bottom: 66rpx;
+		display: flex;
+		justify-content: center;
+		width: 100%;
+		margin-top: 40px;
+	}
+
+	.button {
+		width: 90%;
+		padding: 10rpx 0;
+		border-radius: 24rpx;
+	}
+
+	.review-button {
+		background: #FFFFFF;
+		border: 2rpx solid #20BAF2;
+		color: #20BAF2;
+	}
+
+	.fun-mig {
+		margin: 30rpx 40rpx;
+		background: #F2F7F9;
+		border-radius: 22rpx;
+		display: flex;
+		flex-direction: column;
+		text-align: left;
+		padding: 30rpx 40rpx;
+	}
+
+	.fun-text {
+		font-weight: bold;
+		font-size: 32rpx;
+		color: #222222;
+		line-height: 46rpx;
+		text-align: left;
+		font-style: normal;
+	}
+
+	.fun-sub-text {
+		margin-top: 16rpx;
+		font-weight: 400;
+		font-size: 30rpx;
+		color: #666666;
+		line-height: 44rpx;
+		text-align: left;
+		font-style: normal;
+	}
 </style>

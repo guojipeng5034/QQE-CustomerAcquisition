@@ -22,17 +22,16 @@
 				</view>
 				<view class="options">
 					<view v-for="(option, index) in currentQuestion.options" :key="index" class="option"
-						:class="getOptionClass(option, index)" @click="quizStore.selectAnswer(index)">
+						:class="getOptionClass(option, index)" @click="!reviewMode && quizStore.selectAnswer(index)">
 						<text class="option-prefix">{{ String.fromCharCode(65 + index) }}</text>
 						<text>{{ option.text }}</text>
+
+						<image v-if="reviewMode && option.correct" class="feedback-icon"
+							src="/static/images/sure.svg" />
+						<image v-if="reviewMode && selectedAnswers[currentQuestionIndex] === index && !option.correct"
+							class="feedback-icon" src="/static/images/error.svg" />
 					</view>
 				</view>
-			</view>
-
-			<view v-if="reviewMode" class="explanation-wrapper">
-				<uni-card title="答案解析" :is-shadow="false">
-					<text class="explanation-text">{{ currentQuestion.explanation }}</text>
-				</uni-card>
 			</view>
 
 			<view class="navigation-buttons">
@@ -40,11 +39,13 @@
 					上一题
 				</button>
 				<button v-if="currentQuestionIndex < questions.length - 1" class="button"
+					:class="{ 'disabled-style': selectedAnswers[currentQuestionIndex] === null && !reviewMode }"
 					:disabled="selectedAnswers[currentQuestionIndex] === null && !reviewMode"
 					@click="quizStore.nextQuestion">
 					下一题
 				</button>
 				<button v-if="currentQuestionIndex === questions.length - 1 && !reviewMode" class="button submit-button"
+					:class="{ 'disabled-style': selectedAnswers[currentQuestionIndex] === null }"
 					:disabled="selectedAnswers[currentQuestionIndex] === null" @click="quizStore.submit">
 					提 交
 					<uni-icons type="checkmark" color="#fff"></uni-icons>
@@ -127,7 +128,7 @@
 		/* 图片居中显示 */
 		background-repeat: no-repeat;
 		/* 图片不重复 */
-		
+
 	}
 
 	.title-text {
@@ -202,6 +203,14 @@
 		margin-bottom: 12px;
 		transition: all 0.2s ease;
 		background-color: #EFF5F6;
+		position: relative;
+		/* 新增：允许文字占据剩余空间 */
+		justify-content: flex-start;
+		/* 新增：为右侧图标预留内边距 */
+		padding-right: 40px;
+		/* 这个值需要根据您的图标宽度和间距进行调整 */
+		word-break: break-word;
+		/* 允许长单词换行 */
 	}
 
 	.option-prefix {
@@ -222,6 +231,19 @@
 	.option.incorrect {
 		border-color: #e54d42;
 		background-color: #fff1f0;
+	}
+
+	.feedback-icon {
+		width: 24px;
+		height: 24px;
+		position: absolute;
+		/* 修改：与选项右内边距保持一致或稍小 */
+		right: 15px;
+		/* 可以根据需要调整 */
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 1;
+		/* 确保图标在文字上方 */
 	}
 
 	/* 答案解析 */
@@ -282,9 +304,20 @@
 
 	}
 
-	.button[disabled] {
-		background-color: #B4E6F8;
-		color: #fff;
+	.button::after {
+		border: none;
+	}
+
+	.button.disabled-style[disabled] {
+		background-color: #B4E6F8 !important;
+		color: #fff !important;
+		border: none !important;
+		/* 再次尝试移除边框 */
+		opacity: 1;
+	}
+
+	/* 也可以为 disabled 状态下的伪元素单独设置 */
+	.button.disabled-style[disabled]::after {
 		border: none;
 	}
 

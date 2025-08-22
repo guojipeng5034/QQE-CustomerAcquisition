@@ -117,3 +117,29 @@ export const questions = [
     answer: 1,
   },
 ];
+export const evaluationLevels = [
+  {
+    "min_score": 0,
+    "max_score": 4,
+    "title": "Beginner Migrant",
+    "description": "你的语言迁徙力刚刚启程，基础词汇和表达仍需加强，建议系统提升英语沟通自信心。"
+  },
+  {
+    "min_score": 5,
+    "max_score": 8,
+    "title": "Functional Migrant",
+    "description": "你已具备一定的跨境生存能力，在日常生活和简单职场沟通中可应对自如，但仍存在表达不自然或语法不准确的情况。"
+  },
+  {
+    "min_score": 9,
+    "max_score": 11,
+    "title": "Confident Migrant",
+    "description": "你具备清晰表达与理解复杂语境的能力，可以在跨国团队中良好合作，具备较强的语言迁徙力。"
+  },
+  {
+    "min_score": 12,
+    "max_score": 12,
+    "title": "Strategic Migrant",
+    "description": "恭喜！你的英语已经具备强大的迁徙能力，可轻松应对职场、社交与国际环境中的高阶交流，真正实现全球化语言适应力。"
+  }
+]
