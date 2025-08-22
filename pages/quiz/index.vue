@@ -118,8 +118,16 @@
 	.quiz-container {
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
-		background-color: #f4f4f4;
+		height: 100vh;
+		/* 设置背景图 */
+		background-image: url('https://static.campustop.net/global/wechat/20250822-103609.jpg');
+		background-size: cover;
+		/* 图片完全覆盖容器 */
+		background-position: center;
+		/* 图片居中显示 */
+		background-repeat: no-repeat;
+		/* 图片不重复 */
+		
 	}
 
 	.title-text {
@@ -277,6 +285,7 @@
 	.button[disabled] {
 		background-color: #B4E6F8;
 		color: #fff;
+		border: none;
 	}
 
 	.submit-button {

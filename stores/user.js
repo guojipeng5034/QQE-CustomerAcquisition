@@ -30,8 +30,8 @@ export const useUserStore = defineStore('user', {
           const userRecord = res.userRecord;
           this.setLoginInfo(userRecord);
 
-          // [核心修正] 判断 score 字段是否存在且不为 null (允许 score 为 0)
-          if (userRecord.score !== null && userRecord.score !== undefined) {
+          // [核心修正] 判断 score 字段是否存在且大于 0
+          if (userRecord.score !== null && userRecord.score !== undefined && userRecord.score > 0) {
             // 已有答题结果
             const quizStore = useQuizStore();
             // 假设后端在 userRecord 中也返回了用户的答案记录 "answers" 字段
@@ -39,7 +39,7 @@ export const useUserStore = defineStore('user', {
             quizStore.syncResult(userRecord.score, answersArray);
             this.loginState = 'hasResult';
           } else {
-            // 老用户，但未答题
+            // 老用户，但未答题或分数为0
             this.loginState = 'loggedIn';
           }
         } else {
