@@ -1,5 +1,8 @@
 <template>
 	<view class="result-container">
+		<view class="top-back">
+			
+		</view>
 		<view class="score-card">
 			<view class="score-title">您的答题结果</view>
 			<view class="score-text">
@@ -69,6 +72,9 @@ onLoad(() => {
 	height: 100vh;
 	background-color: #f4f4f4;
 	padding: 20px;
+}
+.top-back{
+	
 }
 .score-card {
 	background-color: #fff;

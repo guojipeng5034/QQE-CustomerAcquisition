@@ -1,9 +1,8 @@
 <template>
 	<view class="entry-container">
 		<view class="loading-wrapper">
-			<image class="logo" src="/static/logo.png" mode="aspectFit"></image>
 			<view class="loading-text">正在加载，请稍候...</view>
-			<progress percent="100" active stroke-width="3" active-mode="forwards" :duration="20"
+			<progress percent="100" active stroke-width="3" active-mode="forwards" :duration="20" activeColor="#20BAF2"
 				class="loading-progress"></progress>
 		</view>
 	</view>

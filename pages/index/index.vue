@@ -1,11 +1,14 @@
 <template>
 	<view class="container">
+		<image src="../../static/images/logo.svg" class="logo"></image>
 		<view class="login-wrapper">
-			<view class="app-name">获客答题系统</view>
-			<view class="slogan">请授权手机号以继续</view>
+			<view class="app-name">测测你的<view class="app-name-green">迁徙力</view></view>
+			<view class="slogan">Discover Your Migration Power</view>
 			<button class="button" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
 				开始答题
+				<image src="../../static/images/right.svg" class="righticon"></image>
 			</button>
+			<view class="btndown"><image src="../../static/images/sure.svg" class="righticon"></image>3分钟测试，解锁你的专属迁徙力语言报告</view>
 		</view>
 		<view class="intro">正在跳转到H5登录...</view>
 	</view>
@@ -59,49 +62,75 @@ onLoad(() => {
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
-		background-color: #f8f8f8;
+		/* 设置背景图 */
+		background-image: url('/static/images/background.jpg');
+		background-size: cover; /* 图片完全覆盖容器 */
+		background-position: center; /* 图片居中显示 */
+		background-repeat: no-repeat; /* 图片不重复 */
 	}
 
 	.login-wrapper {
 		display: flex;
+		position: fixed;
+		bottom: 20vh;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
 	}
 
 	.logo {
-		width: 80px;
-		height: 80px;
-		border-radius: 12px;
-		margin-bottom: 20px;
+		position: fixed;
+		top: 119rpx;
+		left: 40rpx;
+		width: 232rpx;
+		height: 71rpx;
 	}
 
 	.app-name {
-		font-size: 22px;
+		display: flex;
+		font-size: 76rpx;
 		font-weight: bold;
 		margin-bottom: 10px;
+		color: #FFFFFF;
+		letter-spacing: 4rpx;
 	}
-
+	.app-name-green {
+		color: #8EF5B4;
+	}
 	.slogan {
-		font-size: 14px;
-		color: #999;
+		font-size: 34rpx;
+		color: #FFFFFF;
 		margin-bottom: 40px;
+		letter-spacing: 2rpx;
 	}
 
 	.button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 80vw;
-		max-width: 300px;
-		background-color: #1aad19;
+		width: 85vw;
+		background-color: #20BAF2;
 		color: white;
-		border-radius: 25px;
-		font-size: 16px;
-		padding: 10px 0;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		font-weight: 500;
+		border-radius: 24rpx;
+		font-size: 32rpx;
+		padding: 20rpx 0;
+		letter-spacing: 3rpx;
 	}
-
+	.btndown{
+		margin-top: 30rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: #FFFFFF;
+		font-size: 28rpx;
+		letter-spacing: 1rpx;
+	}
+	.righticon{
+		margin: 0 10rpx;
+		height: 54rpx;
+		width: 45rpx;
+	}
 	.intro {
 		display: none;
 		/* 在微信小程序中隐藏H5的提示 */

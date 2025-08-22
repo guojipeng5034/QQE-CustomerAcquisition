@@ -1,36 +1,28 @@
 <template>
 	<view class="quiz-container">
+		<view class="title-text">块酷英语</view>
 		<view v-if="loading" class="loading">
 			<uni-load-more status="loading"></uni-load-more>
 		</view>
 		<view v-else-if="currentQuestion">
 			<view class="status-bar-container">
-				<uni-nav-bar
-					:title="reviewMode ? '回顾答案' : '在线答题'"
-					:left-icon="reviewMode ? 'back' : ''"
-					@clickLeft="goBack"
-					fixed
-				>
-					<template v-slot:right>
-						<view class="progress-text">{{ currentQuestionIndex + 1 }}/{{ questions.length }}</view>
-					</template>
-				</uni-nav-bar>
-				<progress :percent="(currentQuestionIndex + 1) / questions.length * 100" stroke-width="3" activeColor="#007aff" />
+				<view class="progress-index">
+					<progress :percent="(currentQuestionIndex + 1) / questions.length * 100" stroke-width="10"
+						border-radius="9" activeColor="#20BAF2" class="loading-progress" />
+				</view>
+				<view class="progress-text">
+					<view style="color: #222222;font-size: 28rpx;font-weight: 700;">{{ currentQuestionIndex + 1 }}
+					</view> / {{ questions.length }}
+				</view>
 			</view>
 
 			<view class="question-wrapper">
 				<view class="question-title">
-					<text class="question-tag">单选</text>
-					{{ currentQuestion.title }}
+					{{currentQuestionIndex + 1}}.{{ currentQuestion.title }}
 				</view>
 				<view class="options">
-					<view
-						v-for="(option, index) in currentQuestion.options"
-						:key="index"
-						class="option"
-						:class="getOptionClass(option, index)"
-						@click="quizStore.selectAnswer(index)"
-					>
+					<view v-for="(option, index) in currentQuestion.options" :key="index" class="option"
+						:class="getOptionClass(option, index)" @click="quizStore.selectAnswer(index)">
 						<text class="option-prefix">{{ String.fromCharCode(65 + index) }}</text>
 						<text>{{ option.text }}</text>
 					</view>
@@ -44,25 +36,16 @@
 			</view>
 
 			<view class="navigation-buttons">
-				<button v-if="currentQuestionIndex > 0" class="button" @click="quizStore.prevQuestion">
-					<uni-icons type="arrow-left" color="#fff"></uni-icons>
+				<button v-if="currentQuestionIndex > 0" class="button2" @click="quizStore.prevQuestion">
 					上一题
 				</button>
-				<button
-					v-if="currentQuestionIndex < questions.length - 1"
-					class="button"
+				<button v-if="currentQuestionIndex < questions.length - 1" class="button"
 					:disabled="selectedAnswers[currentQuestionIndex] === null && !reviewMode"
-					@click="quizStore.nextQuestion"
-				>
+					@click="quizStore.nextQuestion">
 					下一题
-					<uni-icons type="arrow-right" color="#fff"></uni-icons>
 				</button>
-				<button
-					v-if="currentQuestionIndex === questions.length - 1 && !reviewMode"
-					class="button submit-button"
-					:disabled="selectedAnswers[currentQuestionIndex] === null"
-					@click="quizStore.submit"
-				>
+				<button v-if="currentQuestionIndex === questions.length - 1 && !reviewMode" class="button submit-button"
+					:disabled="selectedAnswers[currentQuestionIndex] === null" @click="quizStore.submit">
 					提 交
 					<uni-icons type="checkmark" color="#fff"></uni-icons>
 				</button>
@@ -72,172 +55,232 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useQuizStore } from '@/stores/quiz';
-import { storeToRefs } from 'pinia';
-import { onLoad } from '@dcloudio/uni-app';
+	import {
+		computed
+	} from 'vue';
+	import {
+		useQuizStore
+	} from '@/stores/quiz';
+	import {
+		storeToRefs
+	} from 'pinia';
+	import {
+		onLoad
+	} from '@dcloudio/uni-app';
 
-const quizStore = useQuizStore();
-// 使用 storeToRefs 保持响应性
-const {
-	loading,
-	questions,
-	currentQuestionIndex,
-	currentQuestion,
-	selectedAnswers,
-	reviewMode,
-} = storeToRefs(quizStore);
+	const quizStore = useQuizStore();
+	// 使用 storeToRefs 保持响应性
+	const {
+		loading,
+		questions,
+		currentQuestionIndex,
+		currentQuestion,
+		selectedAnswers,
+		reviewMode,
+	} = storeToRefs(quizStore);
 
-// 计算每个选项的 class
-const getOptionClass = (option, index) => {
-	const selected = selectedAnswers.value[currentQuestionIndex.value] === index;
-	if (reviewMode.value) {
-		if (option.correct) {
-			return 'correct';
+	// 计算每个选项的 class
+	const getOptionClass = (option, index) => {
+		const selected = selectedAnswers.value[currentQuestionIndex.value] === index;
+		if (reviewMode.value) {
+			if (option.correct) {
+				return 'correct';
+			}
+			if (selected && !option.correct) {
+				return 'incorrect';
+			}
+		} else {
+			if (selected) {
+				return 'selected';
+			}
 		}
-		if (selected && !option.correct) {
-			return 'incorrect';
-		}
-	} else {
-		if (selected) {
-			return 'selected';
-		}
-	}
-	return '';
-};
+		return '';
+	};
 
-// 返回上一页（仅回顾模式）
-const goBack = () => {
-	uni.navigateBack();
-};
+	// 返回上一页（仅回顾模式）
+	const goBack = () => {
+		uni.navigateBack();
+	};
 
-onLoad((options) => {
-	if (options.review) {
-		quizStore.reviewMode = true;
-	} else {
-		// 如果不是回顾模式，则重置并获取新问题
-		quizStore.reset();
-	}
-});
+	onLoad((options) => {
+		if (options.review) {
+			quizStore.reviewMode = true;
+		} else {
+			// 如果不是回顾模式，则重置并获取新问题
+			quizStore.reset();
+		}
+	});
 </script>
 
 <style>
-/* 样式部分保持不变，此处省略以保持简洁 */
-/* 整体布局 */
-.quiz-container {
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	background-color: #f4f4f4;
-}
-.loading {
-	margin-top: 50%;
-}
+	/* 样式部分保持不变，此处省略以保持简洁 */
+	/* 整体布局 */
+	.quiz-container {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		background-color: #f4f4f4;
+	}
 
-/* 顶部状态栏 */
-.status-bar-container {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 10;
-	background-color: #fff;
-}
-.progress-text {
-	padding-right: 20rpx;
-	font-size: 14px;
-}
-/* 避免内容被顶部遮挡 */
-.question-wrapper {
-	margin-top: 100px;
-	padding: 15px;
-	background-color: #fff;
-	border-radius: 8px;
-	margin: 100px 15px 15px;
-}
+	.title-text {
+		margin-top: 103rpx;
+		font-weight: bold;
+		font-size: 34rpx;
+		color: #222222;
+		height: 49rpx;
+		font-style: normal;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
 
-/* 问题区域 */
-.question-title {
-	font-size: 18px;
-	font-weight: bold;
-	line-height: 1.5;
-	margin-bottom: 20px;
-}
-.question-tag {
-	background-color: #007aff;
-	color: #fff;
-	padding: 2px 6px;
-	border-radius: 4px;
-	font-size: 12px;
-	margin-right: 8px;
-}
+	.loading {
+		margin-top: 50%;
+	}
 
-/* 选项 */
-.options .option {
-	display: flex;
-	align-items: center;
-	padding: 15px;
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
-	margin-bottom: 12px;
-	transition: all 0.2s ease;
-	background-color: #fcfcfc;
-}
-.option-prefix {
-	font-weight: bold;
-	margin-right: 10px;
-}
-.option.selected {
-	border-color: #007aff;
-	background-color: #e6f7ff;
-	color: #007aff;
-}
-.option.correct {
-	border-color: #18bc37;
-	background-color: #f6ffed;
-}
-.option.incorrect {
-	border-color: #e54d42;
-	background-color: #fff1f0;
-}
+	.loading-progress {
+		width: 100%;
+	}
 
-/* 答案解析 */
-.explanation-wrapper {
-	padding: 0 15px 120px; /* 底部留出空间给按钮 */
-}
-.explanation-text {
-	font-size: 15px;
-	line-height: 1.6;
-}
+	/* 顶部状态栏 */
+	.status-bar-container {
+		margin-top: 40rpx;
+		padding: 0 20rpx;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+	}
 
-/* 底部按钮 */
-.navigation-buttons {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	display: flex;
-	justify-content: space-around;
-	padding: 15px;
-	padding-bottom: calc(15px + constant(safe-area-inset-bottom));
-	padding-bottom: calc(15px + env(safe-area-inset-bottom));
-	background-color: #fff;
-	border-top: 1px solid #f0f0f0;
-}
-.button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 1;
-	margin: 0 5px;
-	background-color: #007aff;
-	color: #fff;
-}
-.button[disabled] {
-	background-color: #c8c9cc;
-	color: #fff;
-}
-.submit-button {
-	background-color: #18bc37;
-}
+	.progress-index {
+		width: 38vh;
+	}
+
+	.progress-text {
+		font-size: 26rpx;
+		display: flex;
+		align-items: center;
+		color: #9A9A9A;
+	}
+
+	/* 避免内容被顶部遮挡 */
+	.question-wrapper {
+		padding: 36rpx;
+	}
+
+	/* 问题区域 */
+	.question-title {
+		font-size: 18px;
+		font-weight: bold;
+		line-height: 1.5;
+		margin-bottom: 20px;
+	}
+
+	.question-tag {
+		background-color: #007aff;
+		color: #fff;
+		padding: 2px 6px;
+		border-radius: 4px;
+		font-size: 12px;
+		margin-right: 8px;
+	}
+
+	/* 选项 */
+	.options .option {
+		display: flex;
+		align-items: center;
+		padding: 15px;
+		border: 1px solid #EFF5F6;
+		border-radius: 22rpx;
+		margin-bottom: 12px;
+		transition: all 0.2s ease;
+		background-color: #EFF5F6;
+	}
+
+	.option-prefix {
+		font-weight: bold;
+		margin-right: 10px;
+	}
+
+	.option.selected {
+		border-color: #20BAF2;
+		background-color: #E2F7FF;
+	}
+
+	.option.correct {
+		border-color: #0ECE74;
+		background-color: #EAFAF7;
+	}
+
+	.option.incorrect {
+		border-color: #e54d42;
+		background-color: #fff1f0;
+	}
+
+	/* 答案解析 */
+	.explanation-wrapper {
+		padding: 0 15px 120px;
+		/* 底部留出空间给按钮 */
+	}
+
+	.explanation-text {
+		font-size: 15px;
+		line-height: 1.6;
+	}
+
+	/* 底部按钮 */
+	.navigation-buttons {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		display: flex;
+		justify-content: space-around;
+		padding: 15px;
+		padding-bottom: calc(15px + constant(safe-area-inset-bottom));
+		padding-bottom: calc(15px + env(safe-area-inset-bottom));
+	}
+
+	.button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+		margin: 0 5px;
+		font-weight: 500;
+		font-size: 30rpx;
+		height: 98rpx;
+		border-radius: 24rpx;
+		letter-spacing: 2rpx;
+		color: #FFFFFF;
+		background-color: #20BAF2;
+		border: none;
+	}
+
+	.button2 {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex: 1;
+		margin: 0 5px;
+		font-weight: 500;
+		font-size: 30rpx;
+		height: 98rpx;
+		border-radius: 24rpx;
+		letter-spacing: 2rpx;
+		background: #FFFFFF;
+		border-radius: 24rpx;
+		color: #20BAF2;
+		border: 2rpx solid #20BAF2;
+
+	}
+
+	.button[disabled] {
+		background-color: #B4E6F8;
+		color: #fff;
+	}
+
+	.submit-button {
+		color: #FFFFFF;
+		background-color: #20BAF2;
+	}
 </style>
