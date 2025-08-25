@@ -13,10 +13,6 @@
 		onShow
 	} from '@dcloudio/uni-app';
 
-	// [核心修改] 不再需要从 store 中获取 loginState，因为我们将直接等待异步结果
-	// import { useUserStore } from '@/stores/user';
-	// import { storeToRefs } from 'pinia';
-	// import { watch } from 'vue';
 
 	onShow(() => {
 		// 1. 获取在 App.vue 中启动的异步登录任务

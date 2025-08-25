@@ -1,5 +1,6 @@
 <template>
 	<view class="login-container">
+		<!-- #ifdef H5 -->
 		<image src="https://static.campustop.net/global/wechat/logo.svg" class="logo"></image>
 		<view class="login-wrapper">
 			<view class="app-name">测测你的<view class="app-name-green">迁徙力</view>
@@ -25,10 +26,12 @@
 				<image src="../../static/images/sure.svg" class="righticon"></image>3分钟测试，解锁你的专属迁徙力语言报告
 			</view>
 		</view>
+		<!-- #endif -->
 	</view>
 </template>
 
 <script setup>
+	// #ifdef H5
 	import {
 		ref,
 		computed
@@ -109,6 +112,7 @@
 			console.error('H5登录失败:', error);
 		}
 	};
+	// #endif
 </script>
 
 <style>
