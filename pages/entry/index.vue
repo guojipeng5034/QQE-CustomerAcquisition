@@ -1,5 +1,6 @@
 <template>
 	<view class="entry-container">
+		<image src="https://static.campustop.net/global/wechat/logo.svg" class="logo"></image>
 		<view class="loading-wrapper">
 			<view class="loading-text">正在加载，请稍候...</view>
 			<progress percent="100" active stroke-width="3" active-mode="forwards" :duration="20" activeColor="#20BAF2"
@@ -82,9 +83,11 @@
 	}
 
 	.logo {
-		width: 80px;
-		height: 80px;
-		margin-bottom: 20px;
+		position: fixed;
+		top: 119rpx;
+		left: 40rpx;
+		width: 232rpx;
+		height: 71rpx;
 	}
 
 	.loading-text {
