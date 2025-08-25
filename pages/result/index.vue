@@ -3,7 +3,7 @@
 		<view class="top-back">
 			<image src="https://static.campustop.net/global/wechat/20250822-103614.jpg" class="top-back-img"
 				mode="widthFix" />
-			<view class="title-text">块酷英语</view>
+			<view class="title-text">快酷英语</view>
 			<view class="title-phone">{{formatPhone(userStore.userInfo?.phone)}}</view>
 			<view class="title-two">
 				<view class="title-inde">测试报告</view>
@@ -145,7 +145,7 @@
 	.title-phone {
 		color: #FFFFFF;
 		position: absolute;
-		top: 130rpx;
+		top: 110rpx;
 		left: 50rpx;
 	}
 
@@ -171,7 +171,7 @@
 	}
 
 	.title-inde {
-		font-weight: 500;
+		font-weight: 600;
 		font-size: 52rpx;
 		color: #FFFFFF;
 		line-height: 80rpx;

@@ -1,6 +1,6 @@
 <template>
 	<view class="quiz-container">
-		<view class="title-text">块酷英语</view>
+		<view class="title-text">快酷英语</view>
 		<view v-if="loading" class="loading">
 			<uni-load-more status="loading"></uni-load-more>
 		</view>
@@ -33,7 +33,17 @@
 					</view>
 				</view>
 			</view>
-
+			<view v-if="reviewMode" class="answer-review">
+				<view class="review-title">正确答案</view>
+				<view class="review-content">
+					<view class="bottom-text" v-if="userAnswerIndex === correctAnswerIndex">
+						正确答案是 <view style="font-weight: bold;"> {{ correctAnswerLetter }}</view>，回答正确
+					</view>
+					<view v-else class="bottom-text">
+						正确答案是 <view style="font-weight: bold;"> {{ correctAnswerLetter }}</view>，你的答案是 <view style="color: #FF4A4A;font-weight: bold;"> {{ userAnswerLetter }}</view>，回答错误
+					</view>
+				</view>
+			</view>
 			<view class="navigation-buttons">
 				<button v-if="currentQuestionIndex > 0" class="button2" @click="quizStore.prevQuestion">
 					上一题
@@ -49,6 +59,10 @@
 					:disabled="selectedAnswers[currentQuestionIndex] === null" @click="quizStore.submit">
 					提 交
 					<uni-icons type="checkmark" color="#fff"></uni-icons>
+				</button>
+				<button v-if="currentQuestionIndex === questions.length - 1 && reviewMode" class="button"
+					@click="goBack">
+					返回报告
 				</button>
 			</view>
 		</view>
@@ -79,7 +93,30 @@
 		selectedAnswers,
 		reviewMode,
 	} = storeToRefs(quizStore);
+	// --- 将计算属性放在这里 ---
+	const correctAnswerIndex = computed(() => {
+		if (!currentQuestion.value) return -1;
+		return currentQuestion.value.options.findIndex(option => option.correct);
+	});
 
+	const correctAnswerLetter = computed(() => {
+		if (correctAnswerIndex.value !== -1) {
+			return String.fromCharCode(65 + correctAnswerIndex.value);
+		}
+		return '';
+	});
+
+	const userAnswerIndex = computed(() => {
+		return selectedAnswers.value[currentQuestionIndex.value];
+	});
+
+	const userAnswerLetter = computed(() => {
+		if (userAnswerIndex.value !== null && userAnswerIndex.value !== -1) {
+			return String.fromCharCode(65 + userAnswerIndex.value);
+		}
+		return '';
+	});
+	// --- 计算属性结束 ---
 	// 计算每个选项的 class
 	const getOptionClass = (option, index) => {
 		const selected = selectedAnswers.value[currentQuestionIndex.value] === index;
@@ -324,5 +361,25 @@
 	.submit-button {
 		color: #FFFFFF;
 		background-color: #20BAF2;
+	}
+
+	.answer-review {
+		margin-top: 40rpx;
+		padding: 30rpx 0;
+		border-top: 1rpx solid #D6DEE6;
+		margin: 0 30rpx;
+	}
+
+	.review-title {
+		font-weight: bold;
+		margin-bottom: 20rpx;
+	}
+
+	.review-content {
+		color: #333;
+	}
+	.bottom-text{
+		display: flex;
+		align-items: center;
 	}
 </style>
