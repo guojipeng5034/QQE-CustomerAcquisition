@@ -13,7 +13,6 @@
 		onShow
 	} from '@dcloudio/uni-app';
 
-
 	onShow(() => {
 		// 1. 获取在 App.vue 中启动的异步登录任务
 		const loginPromise = getApp().globalData.loginPromise;
@@ -64,7 +63,15 @@
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
-		background-color: #fff;
+		/* 设置背景图 */
+		/* 设置背景图和渐变叠加 */
+		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 0%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
+		background-size: cover;
+		/* 图片完全覆盖容器 */
+		background-position: center;
+		/* 图片居中显示 */
+		background-repeat: no-repeat;
+		/* 图片不重复 */
 	}
 
 	.loading-wrapper {
@@ -82,7 +89,7 @@
 
 	.loading-text {
 		font-size: 14px;
-		color: #999;
+		color: #FFF;
 		margin-bottom: 15px;
 	}
 
