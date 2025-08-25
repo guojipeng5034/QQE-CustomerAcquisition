@@ -133,7 +133,7 @@
 		font-weight: 500;
 		border-radius: 24rpx;
 		font-size: 32rpx;
-		padding: 14rpx 0;
+		padding: 14rpx 0 14rpx 20rpx;
 		letter-spacing: 3rpx;
 	}
 
