@@ -10,7 +10,13 @@
 				<image src="../../static/images/right.svg" class="righticon"></image>
 			</button>
 			<view class="btndown">
-				<image src="../../static/images/sure.svg" class="righticon"></image>3分钟测试，解锁你的专属迁徙力语言报告
+				3分钟测试，解锁你的专属迁徙力语言报告
+			</view>
+			<view class="agreements">
+				<image src="../../static/images/sure.svg" class="sure-righticon"></image>登录即代表您已同意
+				<text class="link" @click="goToAgreement">《用户服务协议》</text>
+				<text class="separator">和</text>
+				<text class="link" @click="goToPrivacy">《隐私政策》</text>
 			</view>
 		</view>
 		<view class="intro">正在跳转到H5登录...</view>
@@ -26,7 +32,17 @@
 	} from '@dcloudio/uni-app';
 
 	const userStore = useUserStore();
+	const goToAgreement = () => {
+		uni.navigateTo({
+			url: '/pages/agreement/index'
+		});
+	};
 
+	const goToPrivacy = () => {
+		uni.navigateTo({
+			url: '/pages/privacy/index'
+		});
+	};
 	const getPhoneNumber = async (e) => {
 		// 1. 检查用户是否拒绝
 		if (e.detail.errMsg !== 'getPhoneNumber:ok') {
@@ -109,7 +125,6 @@
 		font-weight: bold;
 		margin-bottom: 10px;
 		color: #FFFFFF;
-		letter-spacing: 4rpx;
 	}
 
 	.app-name-green {
@@ -120,7 +135,6 @@
 		font-size: 34rpx;
 		color: #FFFFFF;
 		margin-bottom: 40px;
-		letter-spacing: 2rpx;
 	}
 
 	.button {
@@ -144,7 +158,6 @@
 		align-items: center;
 		color: #FFFFFF;
 		font-size: 28rpx;
-		letter-spacing: 1rpx;
 	}
 
 	.righticon {
@@ -152,12 +165,38 @@
 		height: 54rpx;
 		width: 45rpx;
 	}
-
+	.sure-righticon {
+		margin: 0 10rpx;
+		height: 32rpx;
+		width: 32rpx;
+	}
 	.intro {
 		display: none;
 		/* 在微信小程序中隐藏H5的提示 */
 		font-size: 14px;
 		color: #888;
+	}
+
+	.agreements {
+		position: fixed;
+		bottom: 60rpx;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 40rpx;
+		font-size: 20rpx;
+		color: #F2F7F9;
+	}
+
+	.agreements .link {
+		text-decoration: underline;
+		border-bottom: none;
+		/* 移除H5环境下的border */
+		padding-bottom: 0;
+	}
+
+	.agreements .separator {
+		margin: 0 10rpx;
 	}
 
 	/* #ifdef H5 */
