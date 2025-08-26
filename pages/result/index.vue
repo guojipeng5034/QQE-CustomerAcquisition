@@ -9,7 +9,6 @@
 				<view class="title-inde">测试报告</view>
 				<view class="title-inde-chr">TEST REPORT</view>
 			</view>
-			<view class="title-bottom"></view>
 		</view>
 		<view class="score-card">
 			<view class="score-title">
@@ -190,18 +189,10 @@
 		font-style: normal;
 	}
 
-	.title-bottom {
-		background: #FFFFFF;
-		border-radius: 52rpx 52rpx 0 0;
-		width: 100%;
-		height: 60rpx;
-		position: absolute;
-		bottom: 0;
-		padding: 0;
-		margin: 0 0 -1px 0;
-	}
-
 	.score-card {
+		position: absolute;
+		top: 420rpx;
+		border-radius: 52rpx 52rpx 0 0;
 		background: #FFFFFF;
 		background-color: #fff;
 		text-align: center;
