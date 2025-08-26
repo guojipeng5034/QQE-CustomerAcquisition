@@ -19,18 +19,19 @@
 				"navigationStyle": "custom"
 			}
 		}, {
-			"path": "pages/login/index",
-			"style": {
-				"navigationBarTitleText": "快酷英语",
-				"navigationStyle": "custom"
-			}
-		}, {
 			"path": "pages/result/index",
 			"style": {
 				"navigationBarTitleText": "快酷英语",
 				"navigationStyle": "custom"
 			}
 		}
+		// , {
+		// 	"path": "pages/login/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "快酷英语",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

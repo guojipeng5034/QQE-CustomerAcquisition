@@ -59,7 +59,7 @@
 	// *** 1. 引入您的评级数据 ***
 	// 请确保这个文件路径是正确的
 	import { evaluationLevels } from '@/data/questions.js';
-	import GaugeChart from '@/components/GaugeChart/GaugeChart.vue';
+	import GaugeChart from './components/GaugeChart.vue';
 
 	const quizStore = useQuizStore();
 	const userStore = useUserStore();
@@ -122,8 +122,6 @@
 
 	.content {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
 		justify-content: center;
 		padding: 0rpx;
 	}
