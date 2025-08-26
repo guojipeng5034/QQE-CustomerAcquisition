@@ -23,8 +23,8 @@
 				<view class="options">
 					<view v-for="(option, index) in currentQuestion.options" :key="index" class="option"
 						:class="getOptionClass(option, index)" @click="!reviewMode && quizStore.selectAnswer(index)">
-						<text class="option-prefix">{{ String.fromCharCode(65 + index) }}</text>
-						<text>{{ option.text }}</text>
+						<view class="option-prefix">{{ String.fromCharCode(65 + index)+'.' }}</view>
+						<view class="option-text">{{ option.text }}</view>
 
 						<image v-if="reviewMode && option.correct" class="feedback-icon"
 							src="/static/images/sure.svg" />
@@ -37,10 +37,10 @@
 				<view class="review-title">正确答案</view>
 				<view class="review-content">
 					<view class="bottom-text" v-if="userAnswerIndex === correctAnswerIndex">
-						正确答案是 <view style="font-weight: bold;"> {{ correctAnswerLetter }}</view>，回答正确
+						正确答案是 <view style="font-weight: bold;padding-left:10rpx;">{{ correctAnswerLetter }}</view>，回答正确
 					</view>
 					<view v-else class="bottom-text">
-						正确答案是 <view style="font-weight: bold;"> {{ correctAnswerLetter }}</view>，你的答案是 <view style="color: #FF4A4A;font-weight: bold;"> {{ userAnswerLetter }}</view>，回答错误
+						正确答案是 <view style="font-weight: bold;padding-left:10rpx;"> {{ correctAnswerLetter }}</view>，你的答案是 <view style="color: #FF4A4A;font-weight: bold;padding-left:10rpx;">{{ userAnswerLetter }}</view>，回答错误
 					</view>
 				</view>
 			</view>
@@ -233,7 +233,7 @@
 	/* 选项 */
 	.options .option {
 		display: flex;
-		align-items: center;
+		text-align: left;
 		padding: 15px;
 		border: 1px solid #EFF5F6;
 		border-radius: 22rpx;
@@ -241,9 +241,6 @@
 		transition: all 0.2s ease;
 		background-color: #EFF5F6;
 		position: relative;
-		/* 新增：允许文字占据剩余空间 */
-		justify-content: flex-start;
-		/* 新增：为右侧图标预留内边距 */
 		padding-right: 40px;
 		/* 这个值需要根据您的图标宽度和间距进行调整 */
 		word-break: break-word;
@@ -252,9 +249,12 @@
 
 	.option-prefix {
 		font-weight: bold;
-		margin-right: 10px;
+		display: flex;
+		width: 35rpx;
 	}
-
+	.option-text{
+		width: 90%;
+	}
 	.option.selected {
 		border-color: #20BAF2;
 		background-color: #E2F7FF;

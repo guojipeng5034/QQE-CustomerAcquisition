@@ -163,7 +163,7 @@
 		display: flex;
 		flex-direction: column;
 		position: absolute;
-		top: 240rpx;
+		top: 210rpx;
 		left: 50rpx;
 	}
 
@@ -174,7 +174,6 @@
 		line-height: 80rpx;
 		text-align: left;
 		font-style: normal;
-		letter-spacing: 4rpx;
 	}
 
 	.title-inde-chr {
@@ -191,7 +190,7 @@
 
 	.score-card {
 		position: absolute;
-		top: 420rpx;
+		top: 390rpx;
 		border-radius: 52rpx 52rpx 0 0;
 		background: #FFFFFF;
 		background-color: #fff;
@@ -228,7 +227,7 @@
 	}
 
 	.fun-mig {
-		margin: 30rpx 40rpx;
+		margin:0 40rpx 30rpx 40rpx;
 		background: #F2F7F9;
 		border-radius: 22rpx;
 		display: flex;

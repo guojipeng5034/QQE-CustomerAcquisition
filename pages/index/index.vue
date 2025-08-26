@@ -12,12 +12,12 @@
 			<view class="btndown">
 				3分钟测试，解锁你的专属迁徙力语言报告
 			</view>
-			<view class="agreements">
+			<!-- <view class="agreements">
 				<image src="../../static/images/sure.svg" class="sure-righticon"></image>登录即代表您已同意
 				<text class="link" @click="goToAgreement">《用户服务协议》</text>
 				<text class="separator">和</text>
 				<text class="link" @click="goToPrivacy">《隐私政策》</text>
-			</view>
+			</view> -->
 		</view>
 		<view class="intro">正在跳转到H5登录...</view>
 	</view>
@@ -93,7 +93,7 @@
 		height: 100vh;
 		/* 设置背景图 */
 		/* 设置背景图和渐变叠加 */
-		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 0%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
+		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69)100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
 		background-size: cover;
 		/* 图片完全覆盖容器 */
 		background-position: center;
@@ -109,6 +109,7 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
+		width: 100%;
 	}
 
 	.logo {
@@ -141,14 +142,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 85vw;
+		width: 42vh;
 		background-color: #20BAF2;
 		color: white;
 		font-weight: 500;
-		border-radius: 24rpx;
+		border-radius: 20rpx;
 		font-size: 32rpx;
 		padding: 14rpx 0 14rpx 20rpx;
-		letter-spacing: 3rpx;
 	}
 
 	.btndown {
@@ -184,7 +184,7 @@
 		justify-content: center;
 		align-items: center;
 		margin-top: 40rpx;
-		font-size: 20rpx;
+		font-size: 24rpx;
 		color: #F2F7F9;
 	}
 

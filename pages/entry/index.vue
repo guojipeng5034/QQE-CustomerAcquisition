@@ -66,7 +66,7 @@
 		height: 100vh;
 		/* 设置背景图 */
 		/* 设置背景图和渐变叠加 */
-		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 0%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
+		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
 		background-size: cover;
 		/* 图片完全覆盖容器 */
 		background-position: center;

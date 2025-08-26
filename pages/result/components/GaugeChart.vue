@@ -80,8 +80,9 @@
 							color: '#333'
 						},
 						title: {
-							fontSize: 18,
+							fontSize: 16,
 							color: '#888',
+							fontWeight: 500,
 							padding: [5, 0, 0, 0]
 						}
 					}
