@@ -1,6 +1,7 @@
 <template>
 	<view class="container">
-		<image src="https://static.campustop.net/global/wechat/logo.svg" class="logo"></image>
+		<view class="logo"></view>
+		<!-- <image src="" class="logo"></image> -->
 		<view class="login-wrapper">
 			<view class="app-name">测测你的<view class="app-name-green">迁徙力</view>
 			</view>
@@ -118,6 +119,12 @@
 		left: 40rpx;
 		width: 232rpx;
 		height: 71rpx;
+		background-image: url('https://static.campustop.net/global/wechat/logo.svg');
+		background-size: cover;
+		/* 图片完全覆盖容器 */
+		background-position: center;
+		/* 图片居中显示 */
+		background-repeat: no-repeat;
 	}
 
 	.app-name {

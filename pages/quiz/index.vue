@@ -1,5 +1,8 @@
 <template>
 	<view class="quiz-container">
+		<view v-if="reviewMode" class="floating-back-button" @click="goBack">
+			<uni-icons type="back" size="24" color="#000"></uni-icons>
+		</view>
 		<view class="title-text">快酷英语</view>
 		<view v-if="loading" class="loading">
 			<uni-load-more status="loading"></uni-load-more>
@@ -40,7 +43,9 @@
 						正确答案是 <view style="font-weight: bold;padding-left:10rpx;">{{ correctAnswerLetter }}</view>，回答正确
 					</view>
 					<view v-else class="bottom-text">
-						正确答案是 <view style="font-weight: bold;padding-left:10rpx;"> {{ correctAnswerLetter }}</view>，你的答案是 <view style="color: #FF4A4A;font-weight: bold;padding-left:10rpx;">{{ userAnswerLetter }}</view>，回答错误
+						正确答案是 <view style="font-weight: bold;padding-left:10rpx;"> {{ correctAnswerLetter }}</view>
+						，你的答案是 <view style="color: #FF4A4A;font-weight: bold;padding-left:10rpx;">{{ userAnswerLetter }}
+						</view>，回答错误
 					</view>
 				</view>
 			</view>
@@ -168,6 +173,22 @@
 
 	}
 
+	/* 新增：浮动返回按钮样式 */
+	.floating-back-button {
+		position: absolute;
+		top: 100rpx;
+		/* 与标题对齐或根据需要微调 */
+		left: 30rpx;
+		z-index: 99;
+		width: 70rpx;
+		height: 70rpx;
+		/* background-color: rgba(255, 255, 255, 0.8); */
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.title-text {
 		margin-top: 103rpx;
 		font-weight: bold;
@@ -252,9 +273,11 @@
 		display: flex;
 		width: 35rpx;
 	}
-	.option-text{
+
+	.option-text {
 		width: 90%;
 	}
+
 	.option.selected {
 		border-color: #20BAF2;
 		background-color: #E2F7FF;
@@ -378,7 +401,8 @@
 	.review-content {
 		color: #333;
 	}
-	.bottom-text{
+
+	.bottom-text {
 		display: flex;
 		align-items: center;
 	}
