@@ -2,26 +2,26 @@
 	"pages": [{
 			"path": "pages/entry/index",
 			"style": {
-				"navigationBarTitleText": "快酷英语",
+				"navigationBarTitleText": "CampusTop快酷",
 				"navigationStyle": "custom"
 			}
 		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "快酷英语",
+				"navigationBarTitleText": "CampusTop快酷",
 				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/quiz/index",
 			"style": {
-				"navigationBarTitleText": "快酷英语",
+				"navigationBarTitleText": "CampusTop快酷",
 				"navigationStyle": "custom"
 			}
 		}, {
 			"path": "pages/result/index",
 			"style": {
-				"navigationBarTitleText": "快酷英语",
+				"navigationBarTitleText": "CampusTop快酷",
 				"navigationStyle": "custom"
 			}
 		},
@@ -40,7 +40,7 @@
 		// , {
 		// 	"path": "pages/login/index",
 		// 	"style": {
-		// 		"navigationBarTitleText": "快酷英语",
+		// 		"navigationBarTitleText": "CampusTop快酷",
 		// 		"navigationStyle": "custom"
 		// 	}
 		// }

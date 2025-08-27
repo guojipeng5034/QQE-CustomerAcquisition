@@ -1,7 +1,6 @@
 <template>
 	<view class="container">
-		<view class="logo"></view>
-		<!-- <image src="" class="logo"></image> -->
+		<!-- 		<view class="logo"></view> -->
 		<view class="login-wrapper">
 			<view class="app-name">测测你的<view class="app-name-green">迁徙力</view>
 			</view>
@@ -94,7 +93,7 @@
 		height: 100vh;
 		/* 设置背景图 */
 		/* 设置背景图和渐变叠加 */
-		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69)100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
+		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69)100%), url('https://static.campustop.net/global/wechat/20250827-102312.jpg');
 		background-size: cover;
 		/* 图片完全覆盖容器 */
 		background-position: center;
@@ -113,7 +112,7 @@
 		width: 100%;
 	}
 
-	.logo {
+	/* .logo {
 		position: fixed;
 		top: 119rpx;
 		left: 40rpx;
@@ -121,11 +120,9 @@
 		height: 71rpx;
 		background-image: url('https://static.campustop.net/global/wechat/logo.svg');
 		background-size: cover;
-		/* 图片完全覆盖容器 */
 		background-position: center;
-		/* 图片居中显示 */
 		background-repeat: no-repeat;
-	}
+	} */
 
 	.app-name {
 		display: flex;
@@ -172,11 +169,13 @@
 		height: 54rpx;
 		width: 45rpx;
 	}
+
 	.sure-righticon {
 		margin: 0 10rpx;
 		height: 32rpx;
 		width: 32rpx;
 	}
+
 	.intro {
 		display: none;
 		/* 在微信小程序中隐藏H5的提示 */

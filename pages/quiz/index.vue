@@ -3,7 +3,8 @@
 		<view v-if="reviewMode" class="floating-back-button" @click="goBack">
 			<uni-icons type="back" size="24" color="#000"></uni-icons>
 		</view>
-		<view class="title-text">快酷英语</view>
+		<view v-if="!reviewMode" class="title-text">CampusTop快酷</view>
+		<view v-if="reviewMode" class="title-text">答题记录</view>
 		<view v-if="loading" class="loading">
 			<uni-load-more status="loading"></uni-load-more>
 		</view>
@@ -156,8 +157,6 @@
 </script>
 
 <style>
-	/* 样式部分保持不变，此处省略以保持简洁 */
-	/* 整体布局 */
 	.quiz-container {
 		display: flex;
 		flex-direction: column;
@@ -165,24 +164,18 @@
 		/* 设置背景图 */
 		background-image: url('https://static.campustop.net/global/wechat/20250822-103609.jpg');
 		background-size: cover;
-		/* 图片完全覆盖容器 */
 		background-position: center;
-		/* 图片居中显示 */
 		background-repeat: no-repeat;
-		/* 图片不重复 */
 
 	}
 
-	/* 新增：浮动返回按钮样式 */
 	.floating-back-button {
 		position: absolute;
 		top: 100rpx;
-		/* 与标题对齐或根据需要微调 */
 		left: 30rpx;
 		z-index: 99;
 		width: 70rpx;
 		height: 70rpx;
-		/* background-color: rgba(255, 255, 255, 0.8); */
 		border-radius: 50%;
 		display: flex;
 		justify-content: center;
@@ -263,9 +256,7 @@
 		background-color: #EFF5F6;
 		position: relative;
 		padding-right: 40px;
-		/* 这个值需要根据您的图标宽度和间距进行调整 */
 		word-break: break-word;
-		/* 允许长单词换行 */
 	}
 
 	.option-prefix {
@@ -297,19 +288,14 @@
 		width: 24px;
 		height: 24px;
 		position: absolute;
-		/* 修改：与选项右内边距保持一致或稍小 */
 		right: 15px;
-		/* 可以根据需要调整 */
 		top: 50%;
 		transform: translateY(-50%);
 		z-index: 1;
-		/* 确保图标在文字上方 */
 	}
 
-	/* 答案解析 */
 	.explanation-wrapper {
 		padding: 0 15px 120px;
-		/* 底部留出空间给按钮 */
 	}
 
 	.explanation-text {
@@ -317,7 +303,6 @@
 		line-height: 1.6;
 	}
 
-	/* 底部按钮 */
 	.navigation-buttons {
 		position: fixed;
 		bottom: 0;
@@ -372,11 +357,9 @@
 		background-color: #B4E6F8 !important;
 		color: #fff !important;
 		border: none !important;
-		/* 再次尝试移除边框 */
 		opacity: 1;
 	}
 
-	/* 也可以为 disabled 状态下的伪元素单独设置 */
 	.button.disabled-style[disabled]::after {
 		border: none;
 	}

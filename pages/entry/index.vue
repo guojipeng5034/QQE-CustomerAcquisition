@@ -1,6 +1,5 @@
 <template>
 	<view class="entry-container">
-		<image src="https://static.campustop.net/global/wechat/logo.svg" class="logo"></image>
 		<view class="loading-wrapper">
 			<view class="loading-text">正在加载，请稍候...</view>
 			<progress percent="100" active stroke-width="3" active-mode="forwards" :duration="20" activeColor="#20BAF2"
@@ -64,15 +63,10 @@
 		justify-content: center;
 		align-items: center;
 		height: 100vh;
-		/* 设置背景图 */
-		/* 设置背景图和渐变叠加 */
-		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250822-103545.jpg');
+		background-image: linear-gradient(183deg, rgba(0, 0, 0, 0) 50%, rgba(0, 49, 93, 0.69) 100%), url('https://static.campustop.net/global/wechat/20250827-102312.jpg');
 		background-size: cover;
-		/* 图片完全覆盖容器 */
 		background-position: center;
-		/* 图片居中显示 */
 		background-repeat: no-repeat;
-		/* 图片不重复 */
 	}
 
 	.loading-wrapper {
@@ -80,14 +74,6 @@
 		flex-direction: column;
 		align-items: center;
 		width: 80%;
-	}
-
-	.logo {
-		position: fixed;
-		top: 119rpx;
-		left: 40rpx;
-		width: 232rpx;
-		height: 71rpx;
 	}
 
 	.loading-text {
