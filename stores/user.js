@@ -12,6 +12,10 @@ import {
 import {
 	useQuizStore
 } from './quiz';
+import {
+	questions as rawQuestions,
+	evaluationLevels
+} from '@/data/questions.js';
 
 export const useUserStore = defineStore('user', {
 	state: () => ({
@@ -19,7 +23,7 @@ export const useUserStore = defineStore('user', {
 		loginState: 'pending',
 		userInfo: uni.getStorageSync('userInfo') || null,
 		openid: uni.getStorageSync('openid') || '',
-		token: uni.getStorageSync('token') || '',
+		token: uni.getStorageSync('token') || ''
 	}),
 	getters: {
 		isLoggedIn: (state) => state.loginState === 'loggedIn' || state.loginState === 'hasResult',
@@ -27,11 +31,16 @@ export const useUserStore = defineStore('user', {
 	actions: {
 		async handleSilentLogin() {
 			this.loginState = 'pending';
+			const quizStore = useQuizStore();
 			try {
 				const code = await this.getLoginCode();
 				const res = await silentLogin(code);
 
 				this.openid = res.openId;
+				//把问题和评判标准初始化了,预留未来动态初始化
+				quizStore.questionsStr = rawQuestions;
+				quizStore.evaluationLevels = evaluationLevels
+
 				uni.setStorageSync('openid', res.openId);
 
 				if (res.hasRecord) {
@@ -39,13 +48,12 @@ export const useUserStore = defineStore('user', {
 					const userRecord = res.userRecord;
 					this.setLoginInfo(userRecord);
 
-					// [核心修正] 判断 score 字段是否存在且大于等于 0
-					if (userRecord.score !== null && userRecord.score !== undefined && userRecord.score >= 0) {
-						// 已有答题结果
-						const quizStore = useQuizStore();
-						// 假设后端在 userRecord 中也返回了用户的答案记录 "answers" 字段
-						const answersArray = JSON.parse(userRecord.answers || '[]');
-						quizStore.syncResult(userRecord.score, answersArray);
+					//判断 score 字段是否存在且大于等于 0
+					if (userRecord.score !== null && userRecord.score !== undefined && userRecord.score >=
+						0) {
+
+						// 后端在 userRecord 中也返回了用户的答案记录 "remarks" 字段
+						quizStore.syncResult(userRecord.score, userRecord.remarks);
 						this.loginState = 'hasResult';
 					} else {
 						// 老用户，但未答题或分数为-1

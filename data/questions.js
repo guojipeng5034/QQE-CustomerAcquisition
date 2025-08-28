@@ -115,7 +115,7 @@ export const questions = [
       "I am a hardworking person who wants to work."
     ],
     answer: 1,
-  },
+  }
 ];
 export const evaluationLevels = [
   {

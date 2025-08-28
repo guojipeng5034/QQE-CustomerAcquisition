@@ -15,9 +15,8 @@
 			</view>
 			<view class="score-text">
 				<view class="content">
-					<GaugeChart :value="quizStore.score" :max-value="12" />
+					<GaugeChart :value="quizStore.score" :max-value="quizStore.questions.length" />
 				</view>
-
 				<view v-if="resultDetails">
 					<view class="fun-mig">
 						<view class="fun-text">迁徙力等级</view>
@@ -33,7 +32,7 @@
 		</view>
 
 		<view class="action-buttons">
-			<button v-if="canReview" class="button review-button" @click="quizStore.startReview">
+			<button class="button review-button" @click="quizStore.startReview">
 				答题记录
 			</button>
 		</view>
@@ -55,9 +54,7 @@
 	import {
 		onLoad
 	} from '@dcloudio/uni-app';
-	// *** 1. 引入您的评级数据 ***
-	// 请确保这个文件路径是正确的
-	import { evaluationLevels } from '@/data/questions.js';
+
 	import GaugeChart from './components/GaugeChart.vue';
 
 	const quizStore = useQuizStore();
@@ -68,10 +65,9 @@
 			.selectedAnswers.length > 0;
 	});
 	
-	// *** 2. 删除旧的 feedbackMessage，创建新的 resultDetails ***
 	const resultDetails = computed(() => {
 		// 处理正在加载或数据未同步的情况
-		if (!quizStore.hasSyncedResult && quizStore.score === 0) {
+		if (!quizStore.hasSyncedResult && quizStore.score === -1) {
 			return {
 				title: "正在计算...",
 				description: "请稍候，我们正在为您生成评估结果。",
@@ -81,7 +77,7 @@
 		const score = quizStore.score;
 		
 		// 根据分数查找对应的级别对象
-		const foundLevel = evaluationLevels.find(level =>
+		const foundLevel = quizStore.evaluationLevels.find(level =>
 			score >= level.min_score && score <= level.max_score
 		);
 		

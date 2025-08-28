@@ -39,7 +39,7 @@
 	 * @description 获取 ECharts 配置项
 	 * @param {number} progressValue - 当前的进度值
 	 */
-	const getChartOption = (progressValue) => {
+	const getChartOption = (progressValue,maxValue) => {
 		// ECharts 的 option 配置是完全不变的，可以直接复用
 		return {
 			series: [{
@@ -49,7 +49,7 @@
 				startAngle: 180,
 				endAngle: 0,
 				min: 0,
-				max: props.maxValue,
+				max: maxValue,
 				axisLine: {
 					roundCap: true,
 					lineStyle: {
@@ -147,7 +147,7 @@
 				const dpr = uni.getSystemInfoSync().pixelRatio;
 				// 关键改动：调用组件实例的 init 方法
 				gaugeChart.value.init(echarts, chart => {
-					const option = getChartOption(props.value);
+					const option = getChartOption(props.value,props.maxValue);
 					chart.setOption(option);
 				}, { // <-- 这是 ECharts 的 opts 参数
 					devicePixelRatio: dpr // <-- 在这里设置
@@ -160,7 +160,15 @@
 	watch(() => props.value, (newValue) => {
 		if (gaugeChart.value) {
 			// 调用组件实例的方法来更新图表
-			const option = getChartOption(newValue);
+			const option = getChartOption(newValue,props.maxValue);
+			// 假设组件实例上有一个 setOption 方法
+			gaugeChart.value.setOption(option);
+		}
+	});
+	watch(() => props.maxValue, (newValue) => {
+		if (gaugeChart.value) {
+			// 调用组件实例的方法来更新图表
+			const option = getChartOption(props.value,newValue);
 			// 假设组件实例上有一个 setOption 方法
 			gaugeChart.value.setOption(option);
 		}

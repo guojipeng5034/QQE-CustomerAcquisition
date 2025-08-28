@@ -40,7 +40,7 @@ export const getRealPhoneNumber = (code,openId) => {
  * @param {string} openId
  * @param {int} score
  */
-export const submitQuizResult = (openId,score) => {
+export const submitQuizResult = (openId,score,remarks) => {
 	// 这里没有指定配置，默认使用 'default'
 	// 返回结果模型{"success":true,"message":"分数更新成功","userRecord":{"openid":"oZHt5158xJ4TBy6W4SEZJgtlQ2_I","phone":"17711111234","score":10,"remarks":""}}
 	return request({
@@ -48,7 +48,8 @@ export const submitQuizResult = (openId,score) => {
 		method: 'POST',
 		data: {
 			'openid':openId,
-			'score':score
+			'score':score,
+			'remarks':remarks
 		}
 	}, 'phoneService');
 };
