@@ -28,9 +28,10 @@
 		useUserStore
 	} from '@/stores/user';
 	import {
-		onLoad
+		onLoad,
+		onShareAppMessage,
+		onShareTimeline
 	} from '@dcloudio/uni-app';
-
 	const userStore = useUserStore();
 	const goToAgreement = () => {
 		uni.navigateTo({
@@ -47,7 +48,7 @@
 		// 1. 检查用户是否拒绝
 		if (e.detail.errMsg !== 'getPhoneNumber:ok') {
 			uni.showToast({
-				title: '您已取消授权',
+				title: '请先授权登录,在进行答题哦~',
 				icon: 'none'
 			});
 			return;
@@ -82,6 +83,18 @@
 			url: '/pages/login/index'
 		});
 		// #endif
+	});
+	onShareAppMessage((res) => {
+		return {
+			title: '想知道自己的英语能力吗？点这里测一测！',
+			path: '/pages/entry/index',
+		}
+	});
+	onShareTimeline(() => {
+		return {
+			title: '我正在参与免费的英语能力测试，快来加入我吧！',
+			path: '/pages/entry/index',
+		};
 	});
 </script>
 
