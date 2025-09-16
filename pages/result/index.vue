@@ -52,9 +52,10 @@
 		useUserStore
 	} from '@/stores/user';
 	import {
-		onLoad
+		onLoad,onShareAppMessage, onShareTimeline
 	} from '@dcloudio/uni-app';
-
+	import {useShare} from "@/mixin/share.js"
+	useShare()
 	import GaugeChart from './components/GaugeChart.vue';
 
 	const quizStore = useQuizStore();

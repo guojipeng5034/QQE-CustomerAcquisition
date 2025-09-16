@@ -86,8 +86,10 @@
 		storeToRefs
 	} from 'pinia';
 	import {
-		onLoad
+		onLoad,onShareAppMessage, onShareTimeline
 	} from '@dcloudio/uni-app';
+	import {useShare} from "@/mixin/share.js"
+	useShare()
 
 	const quizStore = useQuizStore();
 	// 使用 storeToRefs 保持响应性

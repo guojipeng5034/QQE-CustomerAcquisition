@@ -28,10 +28,10 @@
 		useUserStore
 	} from '@/stores/user';
 	import {
-		onLoad,
-		onShareAppMessage,
-		onShareTimeline
+		onLoad,onShareAppMessage, onShareTimeline
 	} from '@dcloudio/uni-app';
+	import {useShare} from "@/mixin/share.js"
+	useShare()
 	const userStore = useUserStore();
 	const goToAgreement = () => {
 		uni.navigateTo({
@@ -83,18 +83,6 @@
 			url: '/pages/login/index'
 		});
 		// #endif
-	});
-	onShareAppMessage((res) => {
-		return {
-			title: '想知道自己的英语能力吗？点这里测一测！',
-			path: '/pages/entry/index',
-		}
-	});
-	onShareTimeline(() => {
-		return {
-			title: '我正在参与免费的英语能力测试，快来加入我吧！',
-			path: '/pages/entry/index',
-		};
 	});
 </script>
 

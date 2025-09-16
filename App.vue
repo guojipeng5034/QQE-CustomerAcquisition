@@ -1,5 +1,7 @@
 <script>
-	import { useUserStore } from '@/stores/user';
+	import {
+		useUserStore
+	} from '@/stores/user';
 
 	export default {
 		// [新增] 定义全局数据
@@ -8,7 +10,7 @@
 		},
 		onLaunch: function() {
 			console.log('App Launch');
-			
+
 			// #ifdef MP-WEIXIN
 			const userStore = useUserStore();
 			// [核心修改] 将静默登录的 Promise 存入 globalData
@@ -29,6 +31,7 @@
 	@import '@/uni_modules/uni-scss/index.scss';
 	/* #ifndef APP-NVUE */
 	@import '@/static/customicons.css';
+
 	// 设置整个项目的背景色
 	page {
 		background-color: #f5f5f5;
