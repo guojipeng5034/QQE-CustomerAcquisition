@@ -75,7 +75,6 @@
 			console.error('授权流程失败:', error);
 		}
 	};
-
 	onLoad(() => {
 		// H5 平台的逻辑保持不变
 		// #ifdef H5

@@ -2,7 +2,9 @@
 	import {
 		useUserStore
 	} from '@/stores/user';
-
+	import {
+		useQuizStore
+	} from '@/stores/quiz';
 	export default {
 		// [新增] 定义全局数据
 		globalData: {
@@ -19,6 +21,27 @@
 		},
 		onShow: function() {
 			console.log('App Show');
+			// #ifdef MP-WEIXIN
+			const userStore = useUserStore();
+			const quizStore = useQuizStore();
+			// [新增] 在 onShow 中检查登录状态，如果未登录则重新尝试静默登录
+			// a. userStore.isLoggedIn 是从 user.js 的 getters 中获取的计算属性。
+			// b. 它可以确保我们只在用户未登录时才发起登录请求，避免了每次 onShow 都重复执行登录。
+			if (!userStore.isLoggedIn) {
+				console.log('用户未登录，从 onShow 触发静默登录');
+				this.globalData.loginPromise = userStore.handleSilentLogin();
+			} else {
+				if (quizStore.score > -1) {
+					console.log("用户登录且有分数")
+					setTimeout(() => {
+						console.log("执行跳转到result")
+						uni.redirectTo({
+							url: '/pages/result/index'
+						});
+					}, 500); // 延迟100毫秒通常足够了
+				}
+			}
+			// #endif
 		},
 		onHide: function() {
 			console.log('App Hide');
