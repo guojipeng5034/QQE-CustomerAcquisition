@@ -31,7 +31,8 @@
 				console.log('用户未登录，从 onShow 触发静默登录');
 				this.globalData.loginPromise = userStore.handleSilentLogin();
 			} else {
-				if (quizStore.score > -1) {
+				console.log("onshow用户是否登录",quizStore.hasSyncedResult)
+				if (quizStore.hasSyncedResult) {
 					console.log("用户登录且有分数")
 					setTimeout(() => {
 						console.log("执行跳转到result")

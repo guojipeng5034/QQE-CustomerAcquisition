@@ -18,7 +18,7 @@ export const useQuizStore = defineStore('quiz', {
 		loading: false,
 		reviewMode: false,
 		_score: 0,
-		hasSyncedResult: false,
+		hasSyncedResult: uni.getStorageSync('hasSyncedResult') || false,
 		questionsStr: [],
 		evaluationLevels: []
 	}),
@@ -52,8 +52,8 @@ export const useQuizStore = defineStore('quiz', {
 			});
 			this.selectedAnswers = result
 			this.hasSyncedResult = true;
+			uni.setStorageSync('hasSyncedResult', true);
 		},
-		// [新增] 只加载题目，不重置分数和答案，专门给结果页的回顾功能使用
 		async loadQuestionsForReview() {
 			if (this.questions.length > 0) return; // 如果已经有题目了，就不重复加载
 			this.loading = true;
@@ -89,6 +89,7 @@ export const useQuizStore = defineStore('quiz', {
 				this.selectedAnswers = new Array(this.questions.length).fill(null);
 				this._score = 0;
 				this.hasSyncedResult = false;
+				uni.removeStorageSync('hasSyncedResult');
 			} catch (error) {
 				console.error("获取问题失败", error);
 				uni.showToast({
@@ -115,7 +116,10 @@ export const useQuizStore = defineStore('quiz', {
 		},
 		async submit() {
 			const userStore = useUserStore();
-
+			// [核心修改] 在提交前，先根据用户答案计算出最终分数
+			const finalScore = this.score;
+			// [核心修改] 立刻更新 store 内部的 _score 状态
+			this._score = finalScore;
 			// 格式化答案
 			const remarks = this.questions.map((question, index) => {
 				const selectedOptionIndex = this.selectedAnswers[index];
@@ -126,10 +130,10 @@ export const useQuizStore = defineStore('quiz', {
 
 			try {
 				// 将格式化后的答案作为remarks字段提交
-				await submitQuizResult(userStore.openid, this.score, remarks);
+				await submitQuizResult(userStore.openid, finalScore, remarks);
 
 				if (userStore.userInfo) {
-					userStore.userInfo.score = this.score;
+					userStore.userInfo.score = finalScore;
 					uni.setStorageSync('userInfo', userStore.userInfo);
 				}
 
@@ -140,6 +144,8 @@ export const useQuizStore = defineStore('quiz', {
 					icon: 'none'
 				});
 			} finally {
+				this.hasSyncedResult = true;
+				uni.setStorageSync('hasSyncedResult', true);
 				uni.redirectTo({
 					url: '/pages/result/index',
 				});
